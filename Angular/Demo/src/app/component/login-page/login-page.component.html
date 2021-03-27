@@ -1,0 +1,87 @@
+<form [formGroup]="loginform" class="example-form"  >
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title >
+                <h1 class="h1-style">
+                    Login Form
+                </h1>
+            </mat-card-title>
+        </mat-card-header>
+    
+        <div class="row">
+            <div class="col-md-6">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Email Id / UserName</mat-label>
+                    <input formControlName="emailid" matInput placeholder="Email Id">
+                    <mat-hint style="color: red;" *ngIf="g.emailid.touched && g.emailid.errors?.required">
+                        Email Id is required
+                    </mat-hint>
+                </mat-form-field>
+            </div><br>
+        </div>
+    
+        <div class="row">
+            <div class="col-md-6">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Password</mat-label>
+                    <input formControlName="password"  [type]="hide ? 'password' : 'text' " matInput placeholder="Password" >
+                    
+                    <button mat-icon-button matSuffix (click)=" hide = !hide" [attr.aria-label]="'Hide Password'" [attr.aria-pressed]="hide">
+                        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                    <mat-hint style="color: red;" *ngIf="g.password.touched && g.password.errors?.required">
+                        Password is required
+                    </mat-hint>
+                </mat-form-field>
+                
+            </div><br>
+    
+            <div class="col-md-6">
+                <mat-radio-group formControlName="usertype" class="margin-left">
+                    <mat-label>Type:</mat-label>&nbsp;
+                    <mat-radio-button value="sender">Sender</mat-radio-button>&nbsp;
+                    <mat-radio-button value="receiver">Receiver</mat-radio-button>
+                </mat-radio-group>
+            </div><br>
+    
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 main-capp-div">
+                <!-- <mat-form-field class="example-full-width">
+                    <mat-label>CAPTCHA</mat-label>
+                    <input id="captext" matInput type="text" readonly>                    
+                </mat-form-field> -->
+                <div class="col-12 capp-style-div">
+                    <span class="capp-style" >{{capp}}</span>
+                </div><br>
+                
+                
+            </div><br>
+    
+            <div class="col-md-6">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Enter Captcha</mat-label>
+                    <input id="capinput" matInput type="text" formControlName="captinput">
+                    <mat-hint style="color: red;" *ngIf="g.captinput.touched && g.captinput.errors?.required">
+                        Captcha is required
+                    </mat-hint>
+                    
+                </mat-form-field>
+            </div><br>
+    
+        </div>
+
+        <div>
+            <h3>Click here for Captcha <img src="assets/caprefresh.jpg" width="40px" (click)="cap()"></h3>
+        </div>
+    
+        <div>
+            <mat-card-actions>
+                <button (click)="loginsubmit()" mat-raised-button color='primary'>Submit</button>
+            </mat-card-actions>
+        </div>
+        
+    
+    </mat-card>
+    </form>

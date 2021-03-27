@@ -1,62 +1,99 @@
-<!--
+<h1>Registration Form</h1>
+
 <div class="container">
   <div class="row">
-    <div class="col-12 col-style">
-      <app-legend
-        [legendText]="' Registration Page '"
-        [legendContainerClass]="'customClass'"
-      >
-        <div fieldset-body>
-          <div class="row">
-            <div class="col-12">
-              <div class="col-6 float-left">First Name</div>
-              <div class="col-6 float-right">
-                <input type="text" />
-              </div>
-            </div>
-
-            <div class="col-12">
-              <div class="col-6 float-left field-style">Last Name</div>
-              <div class="col-6 float-right field-style">
-                <input type="text" />
-              </div>
-            </div>
-
-            <div class="col-12">
-              <div class="col-6 float-left field-style">Select Type</div>
-              <div class="col-6 float-right field-style">
-                <input type="radio" id="sender" name="user" value="sender" />
-                <label for="male">Sender</label>&nbsp;
-                <input type="radio" id="receiver" name="user" value="receiver" />
-                <label for="receiver">Receiver</label><br />
-              </div>
-            </div>
-
-            <div class="col-12">
-              <div class="col-6 float-left field-style">E-mail</div>
-              <div class="col-6 float-right field-style">
-                <input type="text" />
-              </div>
-            </div>
-            
-            <div class="col-12">
-              <div class="col-6 float-left field-style">Mobile Number</div>
-              <div class="col-6 float-right field-style">
-                <input type="text" />
-              </div>
-            </div>
-
-            <div class="col-12">
-              <div class="col-6 float-right field-style">
-                <input type="submit" value="Submit">
-              </div>
-            </div>
-
+    <form [formGroup]="form" class="col-12" (ngSubmit)="submit()">
+      <div class="form-group col-12 float-left">
+        <div class="col-3 float-left">
+          <label for="fname">First Name</label>
+        </div>
+        <div class="col-5 float-left">
+          <input formControlName="fname" id="fname" type="text" class="form-control"/>
+        </div>
+        <div class="col-4 float-left">
+          <div *ngIf="f.fname.touched && f.fname.invalid" class="alert mb-0 p-1 alert-danger">
+            <div *ngIf="f.fname.errors?.required">First Name is required.</div>
+            <div *ngIf="f.fname.errors?.minlength">Name should be 3 character.</div>
           </div>
         </div>
-      </app-legend>
-    </div>
+        
+      </div>
+
+      <div class="form-group col-12 float-left">
+        <div class="col-3 float-left">
+          <label for="lname">Last Name</label>
+        </div>
+        <div class="col-5 float-left">
+          <input formControlName="lname" id="lname" type="text" class="form-control"/>
+        </div>
+        <div class="col-4 float-left">
+          <div *ngIf="f.lname.touched && f.lname.invalid" class="alert mb-0 p-1 alert-danger">
+            <div *ngIf="f.lname.errors?.required">Last Name is required.</div>
+            <!-- <div *ngIf="f.lname.errors?.minlength">Name should be 3 character.</div> -->
+          </div>
+        </div>
+        
+      </div>
+
+      <div class="form-group col-12 float-left">
+        <div class="col-3 float-left">
+          <label for="email">Email</label>
+        </div>
+        <div class="col-5 float-left">
+          <input formControlName="email" id="email" type="email" class="form-control"/>
+        </div>
+        <div class="col-4 float-left">
+          <div *ngIf="f.email.touched && f.email.invalid" class="alert mb-0 p-1 alert-danger">
+            <div *ngIf="f.email.errors?.required">Email is required.</div>
+            <div *ngIf="f.email.errors?.email">Please, enter valid email address.</div>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="form-group col-12 float-left">
+        <div class="col-3 float-left">
+          <label for="phone">Mobile Number</label>
+        </div>
+        <div class="col-5 float-left">
+          <div class="col-3 p-0 float-left">
+            <select formControlName="countrycode" required name="selectedQuantity" id="countrycode">
+              <option *ngFor="let option of options" [value]="option">{{option}}</option>
+            </select>
+          </div>
+          <div class="col-9 pr-0 float-left">
+            <input formControlName="phone" id="phone" type="tel" maxlength="10" (keypress)="keyPress($event)" class="form-control"/> 
+          </div>            
+          
+        </div>
+        <div class="col-4 float-left">
+          <div *ngIf="f.phone.touched && f.phone.invalid" class="alert mb-0 p-1 alert-danger">
+            <div *ngIf="f.phone.errors?.required">Mobile Number is required.</div>
+            <div *ngIf="f.phone.errors?.maxlength">Mobile Number should be 10 digit.</div>
+          </div>
+        </div>
+        
+      </div>
+
+      <div class="form-group col-12 float-left">
+        <div class="col-3 float-left">
+          <label for="gender">Gender</label>
+        </div>
+        <div class="col-5 float-left">
+          <!-- <input formControlName="lname" id="lname" type="text" class="form-control"/> -->
+          <input type="radio" formControlName="gender" id="male" name="gender" value="male"> <label for="male">Male</label>&nbsp;
+          <input type="radio" formControlName="gender" id="female" name="gender" value="female"> <label for="female">Female</label>
+        </div>
+        <div class="col-4 float-left">
+          <div *ngIf="f.gender.touched && f.gender.invalid" class="alert mb-0 p-1 alert-danger">
+            <div *ngIf="f.gender.errors?.required">Gender is required.</div>
+            <!-- <div *ngIf="f.lname.errors?.minlength">Name should be 3 character.</div> -->
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" type="submit" [disabled]='!form'>Submit</button>
+    </form>
   </div>
 </div>
-
--->

@@ -8,24 +8,8 @@ import {FormGroup,FormControl,FormBuilder,NgForm,Validators} from '@angular/form
 })
 export class AppComponent  {
 
+  constructor() { }
 
-  // userForm: FormGroup;
-  // userForm: FormGroup;
-
-  constructor(public formBuilder: FormBuilder) { }
-
-  form = new FormGroup({
-    name: new FormControl('', [Validators.required, Validators.minLength(3)]),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    body: new FormControl('', Validators.required)
-  });
   
-  get f(){
-    return this.form.controls;
-  }
-  
-  submit(){
-    console.log(this.form.value);
-  }
   
 }
