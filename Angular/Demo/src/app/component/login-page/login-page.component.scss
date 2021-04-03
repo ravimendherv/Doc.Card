@@ -1,12 +1,14 @@
-mat-card{
-    max-width: 600px;
-    margin: 2rem auto;
-    text-align: center;
-    max-height: 600px;
+.form_style{
+    padding: 1vw 25vw;
 }
 
-.header{
-    text-align: center;
+.mat-form-field {
+    width: inherit;
+    font-size: 1vw;
+}
+
+.mat-card-header-text{
+    width: 100%;
 }
 
 .full-width{
@@ -32,8 +34,9 @@ mat-card{
 }
 
 .capp-style-div{
-    padding: 2vw;
+    padding: 0.5vw;
     background-color: red;
+    text-align: center;
     float: left;
     animation-name: example;
     // animation-duration: 4s;
@@ -54,12 +57,12 @@ mat-card{
     display: block;
     text-decoration: line-through;
     /* font-family: cursive; */
-    font-size: 3vw;
+    font-size: 1.8vw;
     font-style: oblique;
     text-decoration-style: dotted;
     font-family: 'Lucida Console', 'Courier New', monospace;
-    -ms-transform: rotate(20deg); /* IE 9 */
-  transform: rotate(20deg);
+    // -ms-transform: rotate(20deg); /* IE 9 */
+//   transform: rotate(20deg);
 }
 
 @keyframes example {

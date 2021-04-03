@@ -1,0 +1,40 @@
+<!-- <div class="fileuploadWrapper {{overrideClass}}">
+    <label class="col-3 alignClass">Document: </label><input type="input" [(ngModel)]="fileName" readonly class="col-7 path-name">
+    <label class="browse-btn text-white"><input type="file" (change)="fileChange($event.target)" [accept]="filterFile" class="hiddn-input">Upload</label>
+    <label class="browse-btn" *ngIf="isUploadBtn" (click)="uploadFile()" [ngClass]="{'disabledElem':fileName===''}">
+        <img class="btnLoadeer" src="" *ngIf="file.inprogress">
+        {{file.inprogress?'':'Upload'}}
+    </label>
+</div> -->
+
+
+<div class="container">
+    <h1 style="text-align: center">File Upload</h1>
+    <br /><br />
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <input type="file" name="profile" (change)="onChange($event)" />
+        <button type="submit">Upload Image File</button>
+    
+      </form>
+    <!-- <input type="file" name="profile" (change)="onChange($event)" />
+    <br>
+    <button class="w-100" (click)="upload()" mat-raised-button color='primary'>Submit</button> -->
+  
+    <!-- <table class="table table-bordered table-dark">
+      <thead>
+        <tr>
+          <th *ngFor="let item of lines[0]; let i = index">
+            {{item}}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of linesR[0]; let i = index">
+          <td *ngFor="let itemm of lines[0]; let j = index">
+            {{item[j]}}
+          </td>
+        </tr>
+      </tbody>
+    </table> -->
+  </div>

@@ -35,46 +35,13 @@
 
     
 
-    <!-- <div class="row">
-        <div class="col-12 float-left">
-            <div class="sendotp-btn">
-                <button (click)="sendemailotp()" mat-raised-button color='primary'>Send OTP</button>
-            </div>
-            <mat-form-field class="example-full-width">
-                <mat-label>Email Id</mat-label>
-                <input formControlName="email" matInput placeholder="Email Id">                
-                <mat-hint style="color: red;" *ngIf="g.email.touched && g.email.errors?.required">
-                    Email Id is Required
-                </mat-hint>
-                <mat-hint style="color: red;" *ngIf="g.email.errors?.email">
-                    Please Enter Correct Email Id 
-                </mat-hint>
-                
-            </mat-form-field>
-        </div><br>
-
-        <div class="col-12 float-left">
-            <mat-card-actions class="sendotp-btn">
-                <button (click)="verifyemail()" mat-raised-button color='primary'>Verify OTP</button>
-            </mat-card-actions>
-
-            <mat-form-field class="example-full-width">
-                <mat-label>Enter Email OTP</mat-label>
-                <input formControlName="emailotp" matInput placeholder="Enter Email OTP">
-                <mat-hint style="color: red;" *ngIf="g.emailotp.touched && g.emailotp.errors?.required">
-                    OTP is Required
-                </mat-hint>
-            </mat-form-field>
-        </div><br>
-    </div>     -->
-
     <div class="row">
         <div class="col-12 pb-3 float-left">
             
             <div class="col-12 col-md-6 pl-0 float-left">
                 <mat-form-field>
                     <mat-label>Email Id</mat-label>
-                    <input formControlName="email" matInput placeholder="Email Id" >                
+                    <input formControlName="email" (keyup)="emailInput($event)" [readOnly]="sendemailotpDisable? true:false" matInput placeholder="Email Id" >                
                     <mat-hint style="color: red;" *ngIf="g.email.touched && g.email.errors?.required">
                         Email Id is Required
                     </mat-hint>
@@ -83,9 +50,10 @@
                     </mat-hint>
                 
                 </mat-form-field>
+                <span *ngIf="emailOTPVerify" class="material-icons text-success">check_circle</span>
             </div>
             <div class="col-12 col-md-6 float-left sendotp-btn">
-                <button (click)="sendemailotp()" mat-raised-button color='primary' >Send OTP</button>
+                <button (click)="sendemailotp()" *ngIf="!g.email.errors?.email && !g.email.errors?.required"  [disabled]="sendemailotpDisable? true:false" mat-raised-button color='primary' >Send OTP</button>
                 
             </div>
         </div>
@@ -95,7 +63,7 @@
             <div class="col-12 col-md-6 pl-0 float-left">
                 <mat-form-field>
                     <mat-label>Enter Email OTP</mat-label>
-                    <input formControlName="emailotp" matInput placeholder="Enter Email OTP">
+                    <input formControlName="emailotp" (keyup)="eOTP($event)"  matInput placeholder="Enter Email OTP">
                     <mat-hint style="color: red;" *ngIf="g.emailotp.touched && g.emailotp.errors?.required">
                         OTP is Required
                     </mat-hint>
@@ -103,9 +71,11 @@
                         Email OTP is not Matching
                     </mat-hint> -->
                 </mat-form-field>
+                
             </div>
             <div class="col-12 col-md-6 float-left sendotp-btn">
                 <button (click)="verifyemail()" mat-raised-button color='primary'>Verify OTP</button>
+                <button (click)="resetemail()" class="ml-3" mat-raised-button color='primary'>Reset</button>
             </div>
         </div>
     </div>  
@@ -116,15 +86,16 @@
             <div class="col-12 col-md-6 pl-0 float-left">
                 <mat-form-field>
                     <mat-label>Mobile Number</mat-label>
-                    <input formControlName="mobile" matInput placeholder="Mobile Number" type="tel" maxlength="10" (keypress)="keyPress($event)" >
+                    <input formControlName="mobile" (keyup)="mobileInput($event)" [readOnly]="sendmobileotpDisable? true:false" matInput placeholder="Mobile Number" type="tel" maxlength="10" (keypress)="keyPress($event)" >
                     <mat-hint style="color: red;" *ngIf="g.mobile.touched && g.mobile.errors?.required">
                         Mobile Number is Required
                     </mat-hint>
                 </mat-form-field>
+                <span *ngIf="mobileOTPVerify" class="material-icons text-success">check_circle</span>
             </div>
 
             <div class="col-12 col-md-6 float-left sendotp-btn">
-                <button (click)="sendmobileotp()" mat-raised-button color='primary'>Send OTP</button>
+                <button (click)="sendmobileotp()" *ngIf="!g.mobile.errors?.required"  [disabled]="sendmobileotpDisable? true:false" mat-raised-button color='primary'>Send OTP</button>
             </div>
         </div>
 
@@ -133,7 +104,7 @@
             <div class="col-12 col-md-6 pl-0 float-left">
                 <mat-form-field>
                     <mat-label>Enter Mobile OTP</mat-label>
-                    <input formControlName="mobileotp" matInput placeholder="Enter Mobile OTP">
+                    <input formControlName="mobileotp" (keyup)="mOTP($event)" matInput placeholder="Enter Mobile OTP">
                     <mat-hint style="color: red;" *ngIf="g.mobileotp.touched && g.mobileotp.errors?.required">
                         OTP is Required
                     </mat-hint>
@@ -141,6 +112,7 @@
             </div>
             <div class="col-12 col-md-6 float-left sendotp-btn">
                 <button (click)="verifymobile()" mat-raised-button color='primary'>Verify OTP</button>
+                <button (click)="resetmobile()" class="ml-3" mat-raised-button color='primary'>Reset</button>
             </div>
         </div>
 
@@ -198,21 +170,23 @@
         </div>
 
         <div class="col-12 col-md-6 pb-3 float-left">
-            <mat-radio-group formControlName="gender" class="margin-left">
-                <mat-label>Gender:</mat-label>&nbsp;
-                <mat-radio-button value="male">Male</mat-radio-button>&nbsp;
-                <mat-radio-button value="female">Female</mat-radio-button>
+            <mat-radio-group formControlName="usertype" class="margin-left font_1vw">
+                <mat-label>User Type:</mat-label>&nbsp;
+                <mat-radio-button value="0">Sender</mat-radio-button>&nbsp;
+                <mat-radio-button value="1">Receiver</mat-radio-button>
             </mat-radio-group>
+            
         </div>
 
     </div>
 
     <div class="row">
         <div class="col-12 pb-3 text-center float-left">
-            <mat-radio-group formControlName="type" class="margin-left">
-                <mat-label>User Type:</mat-label>&nbsp;
-                <mat-radio-button value="sender">Sender</mat-radio-button>&nbsp;
-                <mat-radio-button value="receiver">Receiver</mat-radio-button>
+            <mat-radio-group formControlName="gender" class="margin-left font_1vw">
+                <mat-label>Gender:</mat-label>&nbsp;
+                <mat-radio-button value="1">Male</mat-radio-button>&nbsp;
+                <mat-radio-button value="0">Female</mat-radio-button>&nbsp;
+                <mat-radio-button value="3">Other</mat-radio-button>
             </mat-radio-group>
         </div>
     </div>
