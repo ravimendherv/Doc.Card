@@ -11,6 +11,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FileUploadComponent } from './common/component/file-upload/file-upload.component';
 import { DocUploadComponent } from './component/doc-upload/doc-upload.component';
 import { DocTransactionComponent } from './component/doc-transaction/doc-transaction.component';
+import { LegendComponent } from './common/component/legend/legend.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { DocTransactionComponent } from './component/doc-transaction/doc-transac
     LoginPageComponent,
     FileUploadComponent,
     DocUploadComponent,
-    DocTransactionComponent
+    DocTransactionComponent,
+    LegendComponent
   ],
   imports: [
     BrowserModule,

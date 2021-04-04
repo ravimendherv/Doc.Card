@@ -10,31 +10,80 @@
 
 <div class="container">
     <h1 style="text-align: center">File Upload</h1>
-    <br /><br />
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
-        <input type="file" name="profile" (change)="onChange($event)" />
-        <button type="submit">Upload Image File</button>
+    <!-- <div class="row">
+      
+      <div class="col-12">
+        <div class="col-6">
+          <label class="col-4">Document: </label>
+         
+          <input class="col-8" type="file" name="profile" accept=".pdf" (change)="onChange($event)" />
+        </div>
+        <div class="col-6">
+          <button type="submit" (click)="onSubmit()">Upload Image File</button>
+        </div>
+
+      </div>
+
+    </div> -->
+
+
+    <form [formGroup]="form" >
+
+      <!-- <input type="file" name="profile" (change)="onChange($event)" />
+      <button type="submit">Upload Image File</button> -->
+
+      <div class="row">
+        
+        <div class="col-12  pb-3 float-left">
+            <mat-form-field>
+                <mat-label>Enter DocCard_ID</mat-label>
+                <input formControlName="docId" matInput placeholder="Enter DocCard_ID">
+                <mat-hint style="color: red;" *ngIf="g.docId.touched && g.docId.errors?.required">
+                  DocCard_ID is Required
+                </mat-hint>
+                
+            </mat-form-field>
+        </div>
+
+        <div class="col-12  pb-3 float-left">
+            <mat-form-field>
+                <mat-label>Enter File Name</mat-label>
+                <input formControlName="fileName" matInput placeholder="Enter File Name">
+                <mat-hint style="color: red;" *ngIf="g.fileName.touched && g.fileName.errors?.required">
+                    File Name is Required
+                </mat-hint>
+            </mat-form-field>
+        </div>
+
+        <div class="col-12  pb-3 float-left">
+            <div class="col-6 float-left pl-0">
+              <label class="float-left">Choose File: </label><input class="float-left" type="file" name="profile" accept=".pdf" (change)="onChange($event)" />
+            </div>
+            <div class="col-6 float-left">
+              <div class="progress" *ngIf="progress">
+                <div class="progress-bar" [style.width]="progress + '%'">{{progress}}%</div>
+              </div>
+            </div>
+        </div>
+
+        <div class="col-12 px-5 text-center float-left">
+          <!-- <button class="w-100" (click)="registersubmit()" mat-raised-button color='primary'>Submit</button> -->
+          <button class="w-100" (click)="onSubmit()" mat-raised-button color='primary'>Submit</button>
+        </div>
+
+
+    </div>
+  
+    </form>
+
+        
+       
     
-      </form>
+
+      
     <!-- <input type="file" name="profile" (change)="onChange($event)" />
     <br>
     <button class="w-100" (click)="upload()" mat-raised-button color='primary'>Submit</button> -->
   
-    <!-- <table class="table table-bordered table-dark">
-      <thead>
-        <tr>
-          <th *ngFor="let item of lines[0]; let i = index">
-            {{item}}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of linesR[0]; let i = index">
-          <td *ngFor="let itemm of lines[0]; let j = index">
-            {{item[j]}}
-          </td>
-        </tr>
-      </tbody>
-    </table> -->
   </div>

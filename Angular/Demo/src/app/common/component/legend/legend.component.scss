@@ -1,0 +1,15 @@
+fieldset.scheduler-bolder {
+    border:  1px groove #ddd;
+    padding: 0 1.4em 1.4em 1.4em;
+    margin: 0 0 1.5em 0;
+    -webkit-box-shadow: 0px 0px 0px 0px #000;
+    box-shadow: 0px 0px 0px 0px #000;
+}
+
+legend.scheduler-bolder {
+    width: inherit;
+    padding: 0 10px;
+    border-bottom: none;
+    font-size: smaller;
+    font-weight: bold;
+}

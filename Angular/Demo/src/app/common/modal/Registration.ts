@@ -43,3 +43,6 @@ export interface FileDownload {
     "path": string;
 }
 
+export interface FileUpload {
+    "status": string;
+}

@@ -1,9 +1,9 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { catchError, map, retry } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { EmailVerificationAtRegistaration, FileDownload, ReceicerRegistration, SenderKey, SenderRegistration, SmsVerificationAtRegistaration, UserCreate } from '../modal/Registration';
+import { EmailVerificationAtRegistaration, FileDownload, FileUpload, ReceicerRegistration, SenderKey, SenderRegistration, SmsVerificationAtRegistaration, UserCreate } from '../modal/Registration';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +11,7 @@ import { EmailVerificationAtRegistaration, FileDownload, ReceicerRegistration, S
 export class CommonService {
 
   baseUrl = environment.baseURL;
+  progress:number = 1;
 
   constructor(private http: HttpClient) { }
 
@@ -108,42 +109,23 @@ export class CommonService {
       );
   }
 
-  fileUpload(filedata:any): Observable<FileDownload> {
-    const data = {
-        "doc_id": "687832316147",
-        "input_file": filedata,
-        "file_name": "Pan"
-      }
-      const formData: FormData = new FormData();
-        formData.append('doc_id', '687832316147');
-        formData.append('input_file', filedata);
-        formData.append('file_name', 'Pan');
-    return this.http.post<FileDownload>(this.baseUrl+ '/file_upload/FileUploadView/', filedata, this.httpOptions)
-      .pipe(
-        catchError(this.handleError)
-      );
+  fileUpload(filedata:FormData): Observable<any> {
+    
+    return this.http.post(`${this.baseUrl}/file_upload/FileUploadView/`, filedata,{
+      reportProgress: true,
+      observe: 'events'
+    })
+      // .pipe(
+      //   // catchError(this.handleError)
+      //   map((event: any) => {
+      //     if (event.type == HttpEventType.UploadProgress) {
+      //       this.progress = Math.round((100 / event.total) * event.loaded);
+      //     } else if (event.type == HttpEventType.Response) {
+      //       this.progress = 0;
+      //     }
+      //   }
+      // ));
   }
 
-  // addDocument(user, entydata, filedata, agentVal, implementationTaskIdValue): Observable<AddDocument>{
-  //   let docDetails = {
-  //     "agent": agentVal,
-  //     "entityRequirementIds": entydata,
-  //     "implementationTaskId": implementationTaskIdValue,
-  //     "size": filedata.size,
-  //     "title": filedata.title,
-  //     "type": filedata.type,
-  //     "useerLogin": user
-  //   }
 
-  //   const formData = new FormData();
-  //   formData.append("document", this.fileToUpload);
-  //   formData.append("documentDetails", JSON.stringify(docDetails));
-
-  //   return this.http.post<AddDocument>(this.url + 'cmarp/api/resolutionpacks/addDocument', formData).pipe(
-  //     catchError((err) =>{
-  //       this.errorFiltration(err);
-  //       return this.handleError(err);
-  //     })
-  //   );
-  // }
 }

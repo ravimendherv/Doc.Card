@@ -1,9 +1,10 @@
 import { Component, Input, OnInit, Output, EventEmitter, OnDestroy, VERSION } from '@angular/core';
-import { map } from 'rxjs/operators';
-import { HttpEventType, HttpClient} from '@angular/common/http';
-import { Subscription } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { HttpEventType, HttpClient, HttpEvent} from '@angular/common/http';
+import { Subscription, throwError } from 'rxjs';
 import { CommonService } from '../../services/common.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-file-upload',
@@ -152,26 +153,42 @@ name = "Angular " + VERSION.major;
       lines: any = [];
       linesR: any = [];
       filedata: any;
-      // form: FormGroup | undefined;
-      form: FormGroup = this.formbuilder.group({
+      progress: number = 0;
+      form= this.formbuilder.group({
+        docId: ['', Validators.required],
+        fileName: ['', Validators.required],
         profile: ['']
       });
 
-      ngOnInit() {
-        // form = this.formbuilder.group({
-        //   profile: ['']
-        // });
-      }
+      ngOnInit() {}
+
+      get g(){
+        return this.form.controls;
+      };
 
       onSubmit(){
         const formData: FormData = new FormData();
-        formData.append('doc_id', '687832316147');
+        formData.append('doc_id', this.form.value.docId);
         formData.append('input_file', this.filedata);
-        formData.append('file_name', 'Pan');
+        formData.append('file_name', this.form.value.fileName);
 
-        this.commonApicallService.fileUpload(formData).subscribe(res=>{
-          console.log('res',res);
+        this.commonApicallService.fileUpload(formData).pipe(
+        map((event: any) => {
+          if (event.type == HttpEventType.UploadProgress) {
+            this.progress = Math.round(event.loaded / event.total * 100);
+          } else if (event.type == HttpEventType.Response) {
+            this.progress = 0;
+          }
+        }),
+        catchError((err: any) => {
+          this.progress = 0;
+          alert(err.message);
+          return throwError(err.message);
         })
+      )
+      .toPromise();
+
+
       }
     
       onChange(event:any) {
@@ -219,3 +236,7 @@ name = "Angular " + VERSION.major;
         // }
       }
     }
+
+function x(x: any, arg1: (HttpEvent: any) => void) {
+  throw new Error('Function not implemented.');
+}
