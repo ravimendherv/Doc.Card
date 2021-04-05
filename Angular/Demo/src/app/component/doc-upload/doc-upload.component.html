@@ -1,12 +1,47 @@
-
-
-
-
 <div class="p-5 bg">
-    <app-legend>
+    <app-legend [legendText]="'File Upload'" [legendContainerClass]="''">
         <div fieldset-body>
             <app-file-upload (onFileEmit)="onFilechange($event)"></app-file-upload>
         </div>
     </app-legend>
-    
+
+
+    <app-legend [legendText]="'List of Files'" [legendContainerClass]="''">
+        <div fieldset-body>
+
+            <div class="example-container mat-elevation-z8">
+                <table mat-table [dataSource]="dataSource">
+
+                    <!-- Position Column -->
+                    <ng-container matColumnDef="position">
+                        <th mat-header-cell *matHeaderCellDef class="w-20"> No. </th>
+                        <td mat-cell class="w-20" *matCellDef="let element; let i = index;"> {{i+1}} </td>
+                    </ng-container>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef class="w-60"> Name </th>
+                        <td mat-cell *matCellDef="let element" class="w-60"> {{element}} </td>
+                    </ng-container>
+
+                    <!-- Weight Column -->
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef class="w-20"> Action </th>
+                        <td mat-cell *matCellDef="let element" class="w-20"> 
+                            <!-- <button class="w-100" (click)="registersubmit()" mat-raised-button color='primary'>Delete</button> -->
+                            <button mat-icon-button color="warn" (click)="deleteFile(element)" aria-label="Example icon button with a vertical three dot icon">
+                                <!-- <mat-icon>more_vert</mat-icon> -->
+                                <span class="material-icons">delete_forever</span>
+                            </button>
+                         </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </div>
+
+        </div>
+    </app-legend>
+
 </div>

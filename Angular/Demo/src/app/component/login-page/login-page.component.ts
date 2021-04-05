@@ -18,7 +18,7 @@ capp='';
 
   loginform = this.formBuilder.group({
 
-    emailid:['', [Validators.required, Validators.email]],
+    username:['', Validators.required],
     usertype:['', Validators.required],
     password:['', (Validators.required, Validators.minLength(6), Validators.maxLength(30))],
     captinput : ['', Validators.required]
@@ -34,8 +34,18 @@ capp='';
   };
 
   loginsubmit(){
+
+    const substring = '@'
     
-    if (this.loginform.valid) {  
+    if (this.loginform.valid) { 
+
+      if(this.loginform.value.username.indexOf(substring) !== -1){
+        alert('Email')
+
+      } else{
+        alert('Id')
+      }
+
       alert('Form Submitted succesfully!!!\n Check the values in browser console.');  
       console.log(this.loginform.value);  
     }else{
@@ -64,16 +74,5 @@ capp='';
                   
   };
 
-  // validcap(){
-  //   var stg1 = (<HTMLInputElement>document.getElementById("captext")).value;
-  //   var stg2 = (<HTMLInputElement>document.getElementById("textinput")).value;;
-  //   if(stg1==stg2){
-  //     alert("Form is validated Succesfully");
-  //     return true;
-  //   }else{
-  //     alert("Please enter a valid captcha");
-  //     return false;
-  //   }
-  //  }
-
+  
 }

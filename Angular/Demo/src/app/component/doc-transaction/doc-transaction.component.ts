@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
+
+
+
 @Component({
   selector: 'app-doc-transaction',
   templateUrl: './doc-transaction.component.html',
@@ -8,8 +11,13 @@ import { Component, OnInit } from '@angular/core';
 export class DocTransactionComponent implements OnInit {
 
   constructor() { }
+  
 
   ngOnInit(): void {
+    
   }
 
+  
+
 }
+

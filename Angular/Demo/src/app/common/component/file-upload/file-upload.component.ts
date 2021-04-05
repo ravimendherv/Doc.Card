@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment';
 })
 export class FileUploadComponent implements OnInit {
 
-//   @Output() onFileEmit: EventEmitter<any> = new EventEmitter();
+  @Output() onFileEmit: EventEmitter<any> = new EventEmitter();
 //   @Output() uploadProgress: EventEmitter<any> = new EventEmitter();
 
 //   excelFile = '.csv';
@@ -167,6 +167,7 @@ name = "Angular " + VERSION.major;
       };
 
       onSubmit(){
+        // this.onFileEmit.emit(this.form.value.docId);
         const formData: FormData = new FormData();
         formData.append('doc_id', this.form.value.docId);
         formData.append('input_file', this.filedata);
@@ -178,6 +179,7 @@ name = "Angular " + VERSION.major;
             this.progress = Math.round(event.loaded / event.total * 100);
           } else if (event.type == HttpEventType.Response) {
             this.progress = 0;
+            this.onFileEmit.emit(this.form.value.docId);
           }
         }),
         catchError((err: any) => {
@@ -198,6 +200,7 @@ name = "Angular " + VERSION.major;
           this.filedata = file;
           // this.form.get('profile').setValue(file);
           console.log(this.form);
+          // this.onFileEmit.emit(this.form.value.docId);
         }
         // let fileList = (<HTMLInputElement>files.target).files;
         

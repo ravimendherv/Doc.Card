@@ -51,6 +51,26 @@ export class CommonService {
       );
   }
 
+  outSideAuthToken(): Observable<any> {
+    const data ={
+      "username":"royalvision",
+      "password":"RoYaLViSiOn2000"
+    }
+    
+    return this.http.post<any>(this.baseUrl+ '/auth/', data, this.httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  email_to_username(data:any): Observable<any> {
+    
+    return this.http.post<any>(this.baseUrl+ '/email_to_username/', data, this.httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
   senderRegistration(data:any): Observable<SenderRegistration> {
     
     return this.http.post<SenderRegistration>(this.baseUrl+ '/api/SenderRegistration/', data, this.httpOptions)
@@ -108,6 +128,24 @@ export class CommonService {
         catchError(this.handleError)
       );
   }
+
+  uploadeFileList(docId:string): Observable<any> {
+    
+    return this.http.get(this.baseUrl+ '/getData/?username='+ docId, this.httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  filedelete(data:any): Observable<any> {
+    
+    return this.http.post<any>(this.baseUrl+ '/file_upload/FileDeleterView/', data, this.httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  
 
   fileUpload(filedata:FormData): Observable<any> {
     
