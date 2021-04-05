@@ -12,6 +12,7 @@ export class CommonService {
 
   baseUrl = environment.baseURL;
   progress:number = 1;
+  url:string = '';
 
   constructor(private http: HttpClient) { }
 
@@ -127,5 +128,10 @@ export class CommonService {
       // ));
   }
 
+  sendMessage(messageContent: any) {
+    return this.http.post(this.url,
+    JSON.stringify(messageContent),
+    { headers: new HttpHeaders({ 'Content-Type': 'application/json' }), responseType: 'text' });
+  }
 
 }

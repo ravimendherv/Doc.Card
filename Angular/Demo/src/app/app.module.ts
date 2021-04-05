@@ -12,6 +12,7 @@ import { FileUploadComponent } from './common/component/file-upload/file-upload.
 import { DocUploadComponent } from './component/doc-upload/doc-upload.component';
 import { DocTransactionComponent } from './component/doc-transaction/doc-transaction.component';
 import { LegendComponent } from './common/component/legend/legend.component';
+import { ContactUsComponent } from './common/component/contact-us/contact-us.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { LegendComponent } from './common/component/legend/legend.component';
     FileUploadComponent,
     DocUploadComponent,
     DocTransactionComponent,
-    LegendComponent
+    LegendComponent,
+    ContactUsComponent
   ],
   imports: [
     BrowserModule,
