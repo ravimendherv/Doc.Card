@@ -1,0 +1,61 @@
+<div class="bg-light p-5 h-100">
+
+    <app-legend [legendText]="'List of Files'" [legendContainerClass]="''">
+            <div fieldset-body>
+
+                <div class="example-container mat-elevation-z8">
+                    <table mat-table [dataSource]="dataSource">
+
+                        
+                        <ng-container matColumnDef="position">
+                            <th mat-header-cell *matHeaderCellDef class="w-20"> No. </th>
+                            <td mat-cell class="w-20" *matCellDef="let element; let i = index;"> {{i+1}} </td>
+                        </ng-container>
+
+                        <!-- <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef class="w-60"> Sender ID </th>
+                            <td mat-cell *matCellDef="let element" class="w-60"> {{element.senderid}} </td>
+                        </ng-container> -->
+                        
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef class="w-60"> Name </th>
+                            <td mat-cell *matCellDef="let element" class="w-60"> {{element.name}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef class="w-60"> Date </th>
+                            <td mat-cell *matCellDef="let element" class="w-60"> {{element.date}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="time">
+                            <th mat-header-cell *matHeaderCellDef class="w-60"> Time </th>
+                            <td mat-cell *matCellDef="let element" class="w-60"> {{element.time}} </td>
+                        </ng-container>
+
+                        
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef class="w-20"> Accept </th>
+                            <td mat-cell *matCellDef="let element" class="w-20"> 
+                                <!-- <button class="w-100" (click)="registersubmit()" mat-raised-button color='primary'>Delete</button> -->
+                                <!-- <button mat-icon-button color="warn" (click)="deleteFile(element)" aria-label="Example icon button with a vertical three dot icon">
+                                    
+                                    <span class="material-icons">delete_forever</span>
+                                </button> -->
+                                {{element.action}}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="performed">
+                            <th mat-header-cell *matHeaderCellDef class="w-60"> Deneid </th>
+                            <td mat-cell *matCellDef="let element" class="w-60"> {{element.performed}} </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                </div>
+
+            </div>
+    </app-legend>
+
+</div>

@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms'
+import { Router } from '@angular/router';
+import { CommonService } from 'src/app/common/services/common.service';
+import { CustomCommonService } from 'src/app/common/services/custom-common.service';
 
 @Component({
   selector: 'app-login-page',
@@ -8,13 +11,23 @@ import {FormGroup, FormBuilder, Validators} from '@angular/forms'
 })
 export class LoginPageComponent implements OnInit {
 
+  // evenBusssubscription: any;
+  outsidetokenvalue:string = '';
+  emailUserval: string = '';
+  passVal: string = '';
+  userVal: string = '';
+
   ngOnInit() {
     this.cap();
     }
 
+    tokenval:any;
+
   hide: boolean = true;
-capp='';
-  constructor(private formBuilder:FormBuilder) {  }
+  capp='';
+  
+
+  constructor(private formBuilder:FormBuilder, private router: Router, private customCommonService: CustomCommonService, private commonService: CommonService) {  }
 
   loginform = this.formBuilder.group({
 
@@ -35,18 +48,34 @@ capp='';
 
   loginsubmit(){
 
+    this.customCommonService.on('token data').subscribe((res) =>{
+      this.tokenval= res;
+    })
+    console.log(this.tokenval);
     const substring = '@'
     
     if (this.loginform.valid) { 
 
       if(this.loginform.value.username.indexOf(substring) !== -1){
-        alert('Email')
+        // alert('Email')
+        this.commonService.email_to_username(this.loginform.value.username).subscribe(res => {
+          this.emailUserval = res.username;
+          this.passVal = this.loginform.value.password
+
+        })
+       this.routeByUserType(this.loginform.value.usertype,this.emailUserval,this.passVal);
+
 
       } else{
-        alert('Id')
+        // alert('Id')
+        this.userVal = this.loginform.value.username;
+        this.passVal = this.loginform.value.password
+        this.routeByUserType(this.loginform.value.usertype,this.userVal,this.passVal);
+
+        
       }
 
-      alert('Form Submitted succesfully!!!\n Check the values in browser console.');  
+      // alert('Form Submitted succesfully!!!\n Check the values in browser console.');  
       console.log(this.loginform.value);  
     }else{
       alert('Please Fill All the Details.');
@@ -74,5 +103,47 @@ capp='';
                   
   };
 
+  routeByUserType(val:string, userName:string, pass:string){
+    if(val == '0'){
+      this.commonService.login(userName, pass).subscribe(res => {
+        console.log(res);
+        this.commonService.access = res.access;
+        this.commonService.refresh = res.refresh;
+        this.commonService.userId = res.username;
+        // this.resetlogin();
+      });
+      // this.resetlogin();
+      this.router.navigate(['/senderdashboard']);
+
+    } else if(val== '1'){
+      this.commonService.login(userName, pass).subscribe(res => {
+        console.log(res);
+        this.commonService.access = res.access;
+        this.commonService.refresh = res.refresh;
+        this.commonService.userId = res.username;
+        // this.resetlogin();
+      });
+      // this.resetlogin();
+      this.router.navigate(['/receiverdashboard']);
+    }
+
+  }
+
+  resetlogin() {
+    this.loginform.reset({});
+    // if(formData.value.length > 0){
+    //   // this.userlist.push(formdata.value);
+      
+    //   formData.value = '';
+      
+    // }
+  }
+
+  ngOnDestroy() {
+    this.resetlogin();
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    
+  }
   
 }

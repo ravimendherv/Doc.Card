@@ -28,6 +28,8 @@ export class RegistrationPageComponent implements OnInit {
   emailInputOtp = '';
   mobileOtp = '';
   mobileInputOtp = '';
+  loaderval = false;
+  dobVal= '';
 
   ngOnInit(): void {  }
 
@@ -66,6 +68,7 @@ export class RegistrationPageComponent implements OnInit {
   };
 
   registersubmit(){
+    this.loaderval = true;
      console.log(this.regform.value);
     if (this.regform.valid) {  
       // alert('Form Submitted succesfully!!!\n Check the values in browser console.');  
@@ -81,7 +84,7 @@ export class RegistrationPageComponent implements OnInit {
 
           if(this.regform.value.usertype == '0'){
             const sdata = {
-              "id": res.id,
+              "id": res.id.toString(),
               "doc_id": res.username,
               "f_name": this.regform.value.firstname,
               "l_name": this.regform.value.lastname,
@@ -105,13 +108,15 @@ export class RegistrationPageComponent implements OnInit {
             });
 
             this.commonService.senderKey(sKey).subscribe(s=>{
+              this.loaderval = false;
                 alert('user Created')
+                this.resetlogin();
                 this.regform.reset(this.regform.value);
             });
 
           } else if(this.regform.value.usertype == '1'){
             const rdata = {
-              "id": res.id,
+              "id": res.id.toString(),
               "doc_id": res.username,
               "f_name": this.regform.value.firstname,
               "l_name": this.regform.value.lastname,
@@ -123,13 +128,17 @@ export class RegistrationPageComponent implements OnInit {
             }
 
             this.commonService.receicerRegistration(rdata).subscribe(y=>{
+              this.loaderval = false;
               alert('user Created')
+              this.resetlogin();
               this.regform.reset(this.regform.value);
             });
     
           }
       });
 
+      this.emailOTPVerify = false;
+      this.mobileOTPVerify = false;
       
 
     }else{
@@ -257,10 +266,26 @@ export class RegistrationPageComponent implements OnInit {
     this.mobileInputValue = inputValue;
     // console.log(inputValue);
   }
+
+  dobInput(event: any ){
+    const inputValue = event.target.value;
+    this.dobVal = inputValue;
+    console.log(inputValue);
+  }
   mOTP(event: any ){
     const inputValue = event.target.value;
     this.mobileInputOtp = inputValue;
     // console.log(inputValue);
+  }
+
+  resetlogin() {
+    this.regform.reset({});
+    // if(formData.value.length > 0){
+    //   // this.userlist.push(formdata.value);
+      
+    //   formData.value = '';
+      
+    // }
   }
 
   

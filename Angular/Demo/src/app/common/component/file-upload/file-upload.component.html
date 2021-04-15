@@ -27,28 +27,28 @@
     </div> -->
 
 
-    <form [formGroup]="form" >
+    <form #Fileform = ngForm [formGroup]="form" >
 
       <!-- <input type="file" name="profile" (change)="onChange($event)" />
       <button type="submit">Upload Image File</button> -->
 
       <div class="row">
         
-        <div class="col-12  pb-3 float-left">
+        <!-- <div class="col-12  pb-3 float-left">
             <mat-form-field>
                 <mat-label>Enter DocCard_ID</mat-label>
-                <input formControlName="docId" matInput placeholder="Enter DocCard_ID">
+                <input #Docid formControlName="docId" matInput placeholder="Enter DocCard_ID">
                 <mat-hint style="color: red;" *ngIf="g.docId.touched && g.docId.errors?.required">
                   DocCard_ID is Required
                 </mat-hint>
                 
             </mat-form-field>
-        </div>
+        </div> -->
 
         <div class="col-12  pb-3 float-left">
             <mat-form-field>
                 <mat-label>Enter File Name</mat-label>
-                <input formControlName="fileName" matInput placeholder="Enter File Name">
+                <input #Filename formControlName="fileName"   matInput placeholder="Enter File Name">
                 <mat-hint style="color: red;" *ngIf="g.fileName.touched && g.fileName.errors?.required">
                     File Name is Required
                 </mat-hint>
@@ -57,7 +57,7 @@
 
         <div class="col-12  pb-3 float-left">
             <div class="col-6 float-left pl-0">
-              <label class="float-left pr-3">Choose File: </label>  <input class="float-left" type="file" name="profile" accept=".pdf" (change)="onChange($event)" />
+              <label class="float-left pr-3">Choose File: </label>  <input #Choosefile  class="float-left" type="file" name="profile" (change)="onChange($event)" />
             </div>
             <div class="col-6 float-left">
               <div class="progress" *ngIf="progress">
@@ -68,7 +68,7 @@
 
         <div class="col-12 px-5 text-center float-left">
           <!-- <button class="w-100" (click)="registersubmit()" mat-raised-button color='primary'>Submit</button> -->
-          <button class="w-100" (click)="onSubmit()" mat-raised-button color='primary'>Submit</button>
+          <button class="w-100" (click)="onSubmit()"  mat-raised-button color='primary'  [disabled]="Filename.value == '' || Choosefile.value == '' || !Fileform.valid">Submit</button>
         </div>
 
 

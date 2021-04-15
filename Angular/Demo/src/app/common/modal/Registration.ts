@@ -46,3 +46,28 @@ export interface FileDownload {
 export interface FileUpload {
     "status": string;
 }
+
+
+export interface outSideAuthToken {
+    "token": string;
+}
+
+export interface EmailToUsername {
+    "username": string;
+}
+
+export interface Login {
+    "refresh": string,
+    "access": string,
+    "username": string,
+    "usertype": string
+
+}
+
+export interface  HistFileList{
+"name": string,
+"date": string,
+"time": string,
+"action": string,
+"performed": string
+}

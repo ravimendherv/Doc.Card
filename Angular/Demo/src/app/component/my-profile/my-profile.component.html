@@ -1,0 +1,98 @@
+<div class="container container-paddinng text-dark" style="background-color:white">
+    <div class="row">
+        <div class="col-12 text-right"> 
+            <h1 style="text-align:center; padding-top:15px;">User Profile</h1>
+            
+            <img src="\assets\images\user.png" class="img-rounded" alt="DocCard Logo" width="150" height="150" >
+       
+       
+            <mat-form-field class="col-12 col-md-6  pb-3 float-left">
+                <mat-label>Doc ID.</mat-label>
+                <input matInput disabled value="111222333444">
+              </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12"> 
+            <div>
+                <mat-form-field class="col-12 col-md-6  pb-3 float-left">
+                    <mat-label>First Name.</mat-label>
+                    <input matInput disabled value="Ravi">
+                    <!-- <mat-icon matSuffix>mode_edit</mat-icon> -->
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field class="col-12 col-md-6  pb-3 float-left">
+                    <mat-label>Last Name.</mat-label>
+                    <input matInput disabled value="Mendhe">
+                    <!-- <mat-icon matSuffix>mode_edit</mat-icon> -->
+                </mat-form-field>
+            </div>           
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12"> 
+            <div>
+                <mat-form-field class="col-12 col-md-6  pb-3 float-left">
+                    <mat-label>Email Id.</mat-label>
+                    <input matInput [disabled]="editgmail" value="abc@gmail.com">
+
+                    <mat-icon mat-list-icon matSuffix (click)="editemailvalue()" [hidden]="!uneditgmail " (click)="uneditgmail = !uneditgmail " > mode_edit</mat-icon>
+                    <mat-icon mat-list-icon matSuffix  (click)="saveemailchanges()" [hidden]="savegmail " (click)="savegmail = !savegmail "> send</mat-icon>
+                    
+                </mat-form-field>
+            </div>
+            <!-- <div>
+                <mat-form-field class="col-12 col-md-6  pb-3 float-left">
+                    <mat-label></mat-label>
+                    <input matInput  value="Mendhe">
+                </mat-form-field>
+            </div>  -->
+            <div class="col-12 col-md-6  pb-3 float-left"  >
+                <mat-form-field>
+                    <mat-label>Enter Email OTP</mat-label>
+                    <input #Firstname formControlName="emailotp" matInput >
+                    <mat-icon mat-list-icon matSuffix > verified_user</mat-icon>
+                    
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12"> 
+            <div>
+                <mat-form-field class="col-12 col-md-6  pb-3 float-left">
+                    <mat-label>Mobile Number.</mat-label>
+                    <input matInput [disabled]="editphone" value="9400440044">
+
+                    <mat-icon mat-list-icon matSuffix (click)="editphonevalue()" [hidden]="!uneditphone " (click)="uneditphone = !uneditphone " > mode_edit</mat-icon>
+                    <mat-icon mat-list-icon matSuffix  (click)="savephonechanges()" [hidden]="savephone " (click)="savephone = !savephone "> send</mat-icon>
+                    
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12"> 
+            <div>
+                <mat-form-field class="col-12 col-md-6  pb-3 float-left">
+                    <mat-label>Date of Birth.</mat-label>
+                    <input matInput disabled value="2000-03-29">
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12"> 
+            <div>
+                <mat-form-field class="col-12 col-md-6  pb-3 float-left">
+                    <mat-label>User Type.</mat-label>
+                    <input matInput disabled value="Admin">
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+</div>

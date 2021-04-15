@@ -1,9 +1,10 @@
-import { HttpClient, HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpEventType, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, retry } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { EmailVerificationAtRegistaration, FileDownload, FileUpload, ReceicerRegistration, SenderKey, SenderRegistration, SmsVerificationAtRegistaration, UserCreate } from '../modal/Registration';
+import { EmailToUsername, EmailVerificationAtRegistaration, FileDownload, FileUpload, HistFileList, Login, outSideAuthToken, ReceicerRegistration, SenderKey, SenderRegistration, SmsVerificationAtRegistaration, UserCreate } from '../modal/Registration';
+import { CustomCommonService } from './custom-common.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,14 +14,28 @@ export class CommonService {
   baseUrl = environment.baseURL;
   progress:number = 1;
   url:string = '';
+  tokenval:any;
+  access:any;
+  refresh:any;
+  userId:any;
 
-  constructor(private http: HttpClient) { }
+
+  constructor(private http: HttpClient, private customCommonService: CustomCommonService) { }
 
    httpOptions = {
     headers: new HttpHeaders({
       'Content-Type':  'application/json'
     })
   };
+
+  // this.customCommonService;
+
+  // outsidehttpOptions = {
+  //   headers: new HttpHeaders({
+  //     'Content-Type':  'application/json',
+
+  //   })
+  // };
 
   /**
  * Handle Http operation that failed.
@@ -44,53 +59,94 @@ export class CommonService {
       'Something bad happened; please try again later.');
   }
 
+
+  //Outside method
+
+
   createUser(data: any): Observable<UserCreate> {
+    const outsidehttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        "Authorization": "Token "+ this.tokenval
+      })
+    };
     
-    return this.http.post<UserCreate>(this.baseUrl+ '/user_create/', data, this.httpOptions)
+    return this.http.post<UserCreate>(this.baseUrl+ '/user_create/', data, outsidehttpOptions)
       .pipe(
         catchError(this.handleError)
       );
   }
 
-  outSideAuthToken(): Observable<any> {
+  outSideAuthToken(): Observable<outSideAuthToken> {
     const data ={
       "username":"royalvision",
       "password":"RoYaLViSiOn2000"
     }
+
+    // this.httpOptions =  new HttpHeaders().set("Authorization", "Bearer " + t);
+
     
-    return this.http.post<any>(this.baseUrl+ '/auth/', data, this.httpOptions)
+    return this.http.post<outSideAuthToken>(this.baseUrl+ '/auth/', data, this.httpOptions)
       .pipe(
         catchError(this.handleError)
       );
   }
 
-  email_to_username(data:any): Observable<any> {
-    
-    return this.http.post<any>(this.baseUrl+ '/email_to_username/', data, this.httpOptions)
+  email_to_username(emailid:any): Observable<EmailToUsername> {
+
+    const data={
+      "email": emailid
+    }
+     
+    const outsidehttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        "Authorization": "Token "+ this.tokenval
+      })
+    };
+
+    return this.http.post<EmailToUsername>(this.baseUrl+ '/email_to_username/', data, outsidehttpOptions)
       .pipe(
         catchError(this.handleError)
       );
   }
+
+  
 
   senderRegistration(data:any): Observable<SenderRegistration> {
-    
-    return this.http.post<SenderRegistration>(this.baseUrl+ '/api/SenderRegistration/', data, this.httpOptions)
+    const outsidehttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        "Authorization": "Token "+ this.tokenval
+      })
+    };
+    return this.http.post<SenderRegistration>(this.baseUrl+ '/api/SenderRegistrationProcessViews/', data, outsidehttpOptions)
       .pipe(
         catchError(this.handleError)
       );
   }
 
   receicerRegistration(data:any): Observable<ReceicerRegistration> {
-    
-    return this.http.post<ReceicerRegistration>(this.baseUrl+ '/api/ReceicerRegistration/', data, this.httpOptions)
+    const outsidehttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        "Authorization": "Token "+ this.tokenval
+      })
+    };
+    return this.http.post<ReceicerRegistration>(this.baseUrl+ '/api/ReceicerRegistration/', data, outsidehttpOptions)
       .pipe(
         catchError(this.handleError)
       );
   }
 
   senderKey(data:any): Observable<SenderKey> {
-    
-    return this.http.post<SenderKey>(this.baseUrl+ '/api/SenderKey/', data, this.httpOptions)
+    const outsidehttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        "Authorization": "Token "+ this.tokenval
+      })
+    };
+    return this.http.post<SenderKey>(this.baseUrl+ '/api/SenderKeyRegistrationProcessViews/', data, outsidehttpOptions)
       .pipe(
         catchError(this.handleError)
       );
@@ -102,7 +158,14 @@ export class CommonService {
     const data = {
         "email": emailval
       }
-    return this.http.post<EmailVerificationAtRegistaration>(this.baseUrl+ '/emailVerificationAtRegistaration/', data, this.httpOptions)
+
+      const outsidehttpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+          "Authorization": "Token "+ this.tokenval
+        })
+      };
+    return this.http.post<EmailVerificationAtRegistaration>(this.baseUrl+ '/emailVerificationAtRegistaration/', data, outsidehttpOptions)
       .pipe(
         catchError(this.handleError)
       );
@@ -112,16 +175,34 @@ export class CommonService {
     const data = {
         "mobile_no": mobileno
       }
-    return this.http.post<SmsVerificationAtRegistaration>(this.baseUrl+ '/smsVerificationAtRegistaration/', data, this.httpOptions)
+      const outsidehttpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+          "Authorization": "Token "+ this.tokenval
+        })
+      };
+    return this.http.post<SmsVerificationAtRegistaration>(this.baseUrl+ '/smsVerificationAtRegistaration/', data, outsidehttpOptions)
       .pipe(
         catchError(this.handleError)
       );
   }
 
+  // Inside method
+
+  login(userval:string, passVal: string): Observable<Login> {
+    const data = {
+      "username": userval,
+      "password": passVal
+      }
+    return this.http.post<Login>(this.baseUrl+ '/token/', data, this.httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
 
   fileDownload(emailval:string): Observable<FileDownload> {
     const data = {
-        "doc_id": "707792697170",
+        "doc_id": this.userId,
         "file_name": "abc"
       }
     return this.http.post<FileDownload>(this.baseUrl+ '/file_upload/FileDownloaderView/', data, this.httpOptions)
@@ -131,29 +212,68 @@ export class CommonService {
   }
 
   uploadeFileList(docId:string): Observable<any> {
-    
-    return this.http.get(this.baseUrl+ '/getData/?username='+ docId, this.httpOptions)
+    const insidesidehttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        "Authorization": "Bearer "+ this.access
+      })
+    };
+    return this.http.get(this.baseUrl+ '/getData/?username='+ this.userId, insidesidehttpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  histFileList(docId:string): Observable<HistFileList> {
+    const insidesidehttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        "Authorization": "Bearer "+ this.access
+      })
+    };
+    const data = {
+      "username":"109677101076"
+    } 
+
+    return this.http.post<HistFileList>(this.baseUrl+ '/api/getHistoryList/', data, insidesidehttpOptions)
       .pipe(
         catchError(this.handleError)
       );
   }
 
   filedelete(data:any): Observable<any> {
+    const insidesidehttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        "Authorization": "Bearer "+ this.access
+      })
+    };
     
-    return this.http.post<any>(this.baseUrl+ '/file_upload/FileDeleterView/', data, this.httpOptions)
+    return this.http.post<any>(this.baseUrl+ '/file_upload/FileDeleterView/', data, insidesidehttpOptions)
       .pipe(
         catchError(this.handleError)
       );
   }
 
   
-
   fileUpload(filedata:FormData): Observable<any> {
-    
-    return this.http.post(`${this.baseUrl}/file_upload/FileUploadView/`, filedata,{
+    // const insidesidehttpOptions = {
+    //   headers: new HttpHeaders({
+    //     'Content-Type':  'application/json',
+    //     "Authorization": "Bearer "+this.access
+    //   })
+    // }; 
+
+    let params = new HttpParams();
+
+    const options = {
+      headers: new HttpHeaders().set('Authorization', "Bearer "+this.access),
+      params: params,
       reportProgress: true,
-      observe: 'events'
-    })
+      withCredentials: true,
+    };
+    
+    return this.http.post(`${this.baseUrl}/file_upload/FileUploadView/`, filedata, options)
       // .pipe(
       //   // catchError(this.handleError)
       //   map((event: any) => {
@@ -165,6 +285,25 @@ export class CommonService {
       //   }
       // ));
   }
+
+
+  // fileUpload(filedata:FormData): Observable<any> {
+    
+  //   return this.http.post(`${this.baseUrl}/file_upload/FileUploadView/`, filedata,{
+  //     reportProgress: true,
+  //     observe: 'events'
+  //   })
+  //     // .pipe(
+  //     //   // catchError(this.handleError)
+  //     //   map((event: any) => {
+  //     //     if (event.type == HttpEventType.UploadProgress) {
+  //     //       this.progress = Math.round((100 / event.total) * event.loaded);
+  //     //     } else if (event.type == HttpEventType.Response) {
+  //     //       this.progress = 0;
+  //     //     }
+  //     //   }
+  //     // ));
+  // }
 
   sendMessage(messageContent: any) {
     return this.http.post(this.url,

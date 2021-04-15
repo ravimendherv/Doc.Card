@@ -1,0 +1,202 @@
+<form [formGroup]="regform" class="form_style">
+<mat-card class="float-left p-4">
+    <mat-card-header>
+        <mat-card-title>
+            <h1 class="h1-style">
+                Registration Form
+            </h1>
+        </mat-card-title>
+    </mat-card-header>
+ 
+    <div class="row">
+        
+        <div class="col-12 col-md-6  pb-3 float-left">
+            <mat-form-field>
+                <mat-label>First Name</mat-label>
+                <input formControlName="firstname" matInput placeholder="First Name">
+                <mat-hint style="color: red;" *ngIf="g.firstname.touched && g.firstname.errors?.required">
+                    First Name is Required
+                </mat-hint>
+                
+            </mat-form-field>
+        </div>
+
+        <div class="col-12 col-md-6 pb-3 float-left">
+            <mat-form-field>
+                <mat-label>Last Name</mat-label>
+                <input formControlName="lastname" matInput placeholder="Last Name">
+                <mat-hint style="color: red;" *ngIf="g.lastname.touched && g.lastname.errors?.required">
+                    Last Name is Required
+                </mat-hint>
+            </mat-form-field>
+        </div>
+
+    </div>
+
+    
+
+    <div class="row">
+        <div class="col-12 pb-3 float-left">
+            
+            <div class="col-12 col-md-6 pl-0 float-left">
+                <mat-form-field>
+                    <mat-label>Email Id</mat-label>
+                    <input formControlName="email" (keyup)="emailInput($event)" [readOnly]="sendemailotpDisable? true:false" matInput placeholder="Email Id" >                
+                    <mat-hint style="color: red;" *ngIf="g.email.touched && g.email.errors?.required">
+                        Email Id is Required
+                    </mat-hint>
+                    <mat-hint style="color: red;" *ngIf="g.email.errors?.email">
+                        Please Enter Correct Email Id 
+                    </mat-hint>
+                
+                </mat-form-field>
+                <span *ngIf="emailOTPVerify" class="material-icons text-success">check_circle</span>
+            </div>
+            <div class="col-12 col-md-6 float-left sendotp-btn">
+                <button (click)="sendemailotp()" *ngIf="!g.email.errors?.email && !g.email.errors?.required"  [disabled]="sendemailotpDisable? true:false" mat-raised-button color='primary' >Send OTP</button>
+                
+            </div>
+        </div>
+
+        <div class="col-12 pb-3 float-left" *ngIf = "otp1">
+            
+            <div class="col-12 col-md-6 pl-0 float-left">
+                <mat-form-field>
+                    <mat-label>Enter Email OTP</mat-label>
+                    <input formControlName="emailotp" (keyup)="eOTP($event)"  matInput placeholder="Enter Email OTP">
+                    <mat-hint style="color: red;" *ngIf="g.emailotp.touched && g.emailotp.errors?.required">
+                        OTP is Required
+                    </mat-hint>
+                    <!-- <mat-hint style="color: red;" *ngIf="g.emailotp.errors?.otpemail">
+                        Email OTP is not Matching
+                    </mat-hint> -->
+                </mat-form-field>
+                
+            </div>
+            <div class="col-12 col-md-6 float-left sendotp-btn">
+                <button (click)="verifyemail()" mat-raised-button color='primary'>Verify OTP</button>
+                <button (click)="resetemail()" class="ml-3" mat-raised-button color='primary'>Reset</button>
+            </div>
+        </div>
+    </div>  
+
+    <div class="row">
+        <div class="col-12 pb-3 float-left">
+            
+            <div class="col-12 col-md-6 pl-0 float-left">
+                <mat-form-field>
+                    <mat-label>Mobile Number</mat-label>
+                    <input formControlName="mobile" (keyup)="mobileInput($event)" [readOnly]="sendmobileotpDisable? true:false" matInput placeholder="Mobile Number" type="tel" maxlength="10" (keypress)="keyPress($event)" >
+                    <mat-hint style="color: red;" *ngIf="g.mobile.touched && g.mobile.errors?.required">
+                        Mobile Number is Required
+                    </mat-hint>
+                </mat-form-field>
+                <span *ngIf="mobileOTPVerify" class="material-icons text-success">check_circle</span>
+            </div>
+
+            <div class="col-12 col-md-6 float-left sendotp-btn">
+                <button (click)="sendmobileotp()" *ngIf="!g.mobile.errors?.required"  [disabled]="sendmobileotpDisable? true:false" mat-raised-button color='primary'>Send OTP</button>
+            </div>
+        </div>
+
+        <div class="col-12 pb-3 float-left" *ngIf = "otp2">
+            
+            <div class="col-12 col-md-6 pl-0 float-left">
+                <mat-form-field>
+                    <mat-label>Enter Mobile OTP</mat-label>
+                    <input formControlName="mobileotp" (keyup)="mOTP($event)" matInput placeholder="Enter Mobile OTP">
+                    <mat-hint style="color: red;" *ngIf="g.mobileotp.touched && g.mobileotp.errors?.required">
+                        OTP is Required
+                    </mat-hint>
+                </mat-form-field>
+            </div>
+            <div class="col-12 col-md-6 float-left sendotp-btn">
+                <button (click)="verifymobile()" mat-raised-button color='primary'>Verify OTP</button>
+                <button (click)="resetmobile()" class="ml-3" mat-raised-button color='primary'>Reset</button>
+            </div>
+        </div>
+
+    </div>
+
+    
+
+    <div class="row">
+        <div class="col-12 col-md-6 pb-3 float-left">
+            <mat-form-field>
+                <mat-label>Password</mat-label>
+                <input formControlName="password"  [type]="hide1 ? 'password' : 'text' " matInput placeholder="Password" >
+                
+                <button mat-icon-button matSuffix (click)=" hide1 = !hide1" [attr.aria-label]="'Hide Password'" [attr.aria-pressed]="hide1">
+                    <mat-icon>{{hide1 ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                <mat-hint style="color: red;" *ngIf="g.password.touched && g.password.errors?.required">
+                    Password is required
+                </mat-hint>
+                <mat-hint style="color: red;" *ngIf="g.password.errors?.minlength">
+                    Password must be at least 6 characters
+                 </mat-hint>
+            </mat-form-field>
+        </div><br>
+
+        <div class="col-12 col-md-6 pb-3 float-left">
+            <mat-form-field>
+                <mat-label>Confirm Password</mat-label>
+                <input formControlName="confirmpassword"  [type]="hide2 ? 'password' : 'text' " matInput placeholder="confirmpassword" >
+                <button mat-icon-button matSuffix (click)=" hide2 = !hide2" [attr.aria-label]="'Hide Confirm Password'" [attr.aria-pressed]="hide2">
+                    <mat-icon>{{hide2 ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                <mat-hint style="color: red;" *ngIf="g.confirmpassword.touched && g.confirmpassword.errors?.required">
+                   Confirm Password is Required
+                </mat-hint>
+                <mat-hint style="color: red;" *ngIf="g.confirmpassword.errors?.mustMatch">
+                    Password and Confirm Password is not Matching.
+                 </mat-hint>
+                
+            </mat-form-field>
+        </div><br>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-md-6 pb-3 float-left top-padding">
+            <mat-form-field appearance="fill">
+                <mat-label>Select DOB</mat-label>
+                <input formControlName="dob" matInput [matDatepicker]="picker">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-hint style="color: red;" *ngIf="g.dob.touched && g.dob.errors?.required">
+                    DOB is Required
+                </mat-hint>
+            </mat-form-field>
+        </div>
+
+        <div class="col-12 col-md-6 pb-3 float-left">
+            <mat-radio-group formControlName="usertype" class="margin-left font_1vw">
+                <mat-label>User Type:</mat-label>&nbsp;
+                <mat-radio-button value="0">Sender</mat-radio-button>&nbsp;
+                <mat-radio-button value="1">Receiver</mat-radio-button>
+            </mat-radio-group>
+            
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-12 pb-3 text-center float-left">
+            <mat-radio-group formControlName="gender" class="margin-left font_1vw">
+                <mat-label>Gender:</mat-label>&nbsp;
+                <mat-radio-button value="1">Male</mat-radio-button>&nbsp;
+                <mat-radio-button value="0">Female</mat-radio-button>&nbsp;
+                <mat-radio-button value="3">Other</mat-radio-button>
+            </mat-radio-group>
+        </div>
+    </div>
+        
+    <div class="col-12 px-5 text-center float-left">
+       
+            <button class="w-100" (click)="registersubmit()" mat-raised-button color='primary'>Submit</button>
+        
+    </div>
+    
+
+</mat-card>
+</form>

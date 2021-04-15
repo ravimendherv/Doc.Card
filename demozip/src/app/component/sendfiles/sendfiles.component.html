@@ -1,0 +1,47 @@
+<form [formGroup]="sendfile" class="form_style">
+    <mat-card class="p-5">
+        
+        <div class="row">
+            <div class="col-12 pb-3 float-left">
+                <h1 class="text-center w-100">
+                    Send Files
+                </h1>
+            </div>
+        </div>
+    
+        <div class="row">
+            <div class="col-12 pb-3 float-left">
+                <mat-form-field>
+                    <mat-label>Receiver's Doc. Id</mat-label>
+                    <input formControlName="receiverid"  matInput placeholder="Receiver's Doc. Id" type="tel" minlength="12" maxlength="12" (keypress)="keyPress($event)" >
+                    <mat-hint style="color: red;" *ngIf="g.receiverid.touched && g.receiverid.errors?.required">
+                        Receiver's Doc. Id is Required.
+                    </mat-hint>
+                </mat-form-field>
+            </div>
+
+            <mat-form-field>
+                        
+                <mat-select formControlName="contactFormSubjects" placeholder="Select File" [(value)]="showval" multiple>
+                   
+                    <mat-option *ngFor="let val of optionsSelect" [value]="val.value">
+                        {{val.label}}
+                    </mat-option>
+                </mat-select>
+                <mat-hint style="color: red;" *ngIf="g.contactFormSubjects.touched && g.contactFormSubjects.errors?.required">
+                    Please Select File.
+                </mat-hint>
+            </mat-form-field>
+              
+            
+            <div>
+                <div class="col-12 px-5 text-center float-left">
+                    <button class="w-100 button-style" color="info" outline="true" rounded="true"   (click)="filesend()" mat-raised-button color='primary'>Send</button>
+                </div>
+            </div>
+            
+        </div>
+        
+    
+    </mat-card>
+</form>

@@ -14,6 +14,15 @@ import { DocTransactionComponent } from './component/doc-transaction/doc-transac
 import { LegendComponent } from './common/component/legend/legend.component';
 import { TableLayoutComponent } from './common/component/table-layout/table-layout.component';
 import { ContactUsComponent } from './common/component/contact-us/contact-us.component';
+import { SenderDashboardComponent } from './component/dashboard/sender-dashboard/sender-dashboard.component';
+import { ReceiverDashboardComponent } from './component/dashboard/receiver-dashboard/receiver-dashboard.component';
+import { ResetPasswordComponent } from './component/reset-password/reset-password.component';
+import { PageLoaderComponent } from './common/component/page-loader/page-loader.component';
+import { DocCardComponent } from './component/doc-card/doc-card.component';
+import { MyProfileComponent } from './component/my-profile/my-profile.component';
+import { NotificationComponent } from './component/notification/notification.component';
+import { SendDocumentComponent } from './component/send-document/send-document.component';
+import { ReceiveDocumentComponent } from './component/receive-document/receive-document.component';
 
 
 @NgModule({
@@ -26,7 +35,16 @@ import { ContactUsComponent } from './common/component/contact-us/contact-us.com
     DocTransactionComponent,
     LegendComponent,
     TableLayoutComponent,
-    ContactUsComponent
+    ContactUsComponent,
+    SenderDashboardComponent,
+    ReceiverDashboardComponent,
+    ResetPasswordComponent,
+    PageLoaderComponent,
+    DocCardComponent,
+    MyProfileComponent,
+    NotificationComponent,
+    SendDocumentComponent,
+    ReceiveDocumentComponent
   ],
   imports: [
     BrowserModule,

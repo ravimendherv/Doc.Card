@@ -1,0 +1,70 @@
+<form [formGroup]="doccardinfo" class="form_style">
+
+    <div class="row">
+    
+            <div class="flip-card col-12 col-md-6 pb-3 float-left">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <img  src="assets/images/back.png"  >
+                    </div>
+                    <div class="flip-card-back">
+                        <img  src="assets/images/front.png"  >
+                    </div>
+                </div>
+            </div> 
+        
+
+    </div>
+    
+    <mat-card class="p-4">
+        
+        <div>
+            <button class="w-100" (click)="cardrequest()"  mat-raised-button color='primary'>Request for Hard Copy of Card</button>
+            
+        </div>
+            <div class="row" *ngIf = "carddetails == false" >
+                
+
+                <div class="col-12 pb-3 ">
+                    <h1 class="text-center w-100">
+                        Request for Hard Copy of Card
+                    </h1>
+                </div>
+    
+                <div class="col-12 w-100 pb-4">
+                    <mat-form-field>
+                        <mat-label>Sender's Address</mat-label>
+                        <textarea formControlName="senderaddress" matInput placeholder="Sender's Address"></textarea>
+                        <mat-hint style="color: red;" *ngIf="g.senderaddress.touched && g.senderaddress.errors?.required">
+                            Comment is Required
+                        </mat-hint>
+                    </mat-form-field>
+                </div>
+    
+                <div class="col-12 w-100 pb-4 float-left">
+                    <mat-form-field>
+                        <mat-label>Charges</mat-label>
+                        <input formControlName="price" matInput readonly>
+                        <!-- <mat-hint style="color: red;" *ngIf="g.contactFormEmail.touched && g.contactFormEmail.errors?.required">
+                            E-mail is Required
+                        </mat-hint> -->
+                    </mat-form-field>
+                </div>
+
+                <div>
+                    <button class="w-100" (click)="buyrequest()" mat-raised-button color='primary'>Buy</button>
+        
+                </div>
+    
+            </div>  
+            
+           
+            
+  
+            
+    
+        
+        
+    
+    </mat-card>
+    </form>

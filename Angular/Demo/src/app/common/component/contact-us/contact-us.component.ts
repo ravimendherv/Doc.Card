@@ -63,10 +63,13 @@ constructor(fb: FormBuilder, private commonservice: CommonService) {
   // }
 
   onSubmit() {
+    
     this.commonservice.sendMessage(this.contactForm.value).subscribe(() => {
       alert('Your message has been sent.');
-      this.contactForm.reset();
-      this.disabledSubmitButton = true;
+      // this.contactForm.reset();
+      // this.disabledSubmitButton = true;
+      
+      
     }, (error: any) => {
       console.log('Error', error);
     });
@@ -77,6 +80,13 @@ constructor(fb: FormBuilder, private commonservice: CommonService) {
   // ngOnInit(): void {
   // }
 
+  // resetcontact(formData:any) {
+  //   if(formData.value.length > 0){
+  //     // this.userlist.push(formdata.value);
+  //     formData.value = '';
+      
+  //   }
+  // }
 
 
 }

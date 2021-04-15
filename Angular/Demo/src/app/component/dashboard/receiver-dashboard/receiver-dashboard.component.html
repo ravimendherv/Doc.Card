@@ -1,0 +1,50 @@
+
+<mat-sidenav-container autosize>
+  
+    <mat-toolbar >
+      <mat-toolbar-row >
+        <span class="example-spacer"></span>
+        <button mat-button class="example-icon" aria-hidden="false" aria-label="Example notifications icon">
+          <mat-icon [matBadge]="notify" [matBadgeHidden]="notify == 0" matBadgeColor="warn" routerLink="notify">notifications</mat-icon>
+        </button>
+        <button mat-button class="example-icon" aria-hidden="false" aria-label="Example exit_to_app icon">
+          <mat-icon>exit_to_app</mat-icon>
+        </button>
+      </mat-toolbar-row>
+    </mat-toolbar>
+    
+    <mat-sidenav #sidenav mode="side" opened="true">
+        
+      <mat-nav-list>
+          
+          <mat-list-item>
+              <mat-icon mat-list-icon (click)="isExpanded = !isExpanded" >
+                  view_headline
+                </mat-icon>
+          </mat-list-item>
+          
+    
+          <mat-list-item routerLink="myprofile">
+            <mat-icon mat-list-icon >perm_identity</mat-icon>
+            <span *ngIf="isExpanded">My Profile</span>
+          </mat-list-item>
+    
+          <mat-list-item routerLink="doctransation">
+            <mat-icon mat-list-icon>event_note</mat-icon>
+            <span *ngIf="isExpanded">Document History</span>
+          </mat-list-item>
+
+          <mat-list-item routerLink="receivedoc">
+            <mat-icon >archive</mat-icon>
+            <span *ngIf="isExpanded">Received Documents</span>
+          </mat-list-item>
+    
+      </mat-nav-list>
+    </mat-sidenav>
+    
+    <div class="content">
+        <!-- <app-sender-dashboard></app-sender-dashboard> -->
+      <router-outlet></router-outlet>
+    </div>
+    
+  </mat-sidenav-container>

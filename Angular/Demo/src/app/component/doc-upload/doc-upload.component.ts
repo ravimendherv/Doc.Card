@@ -36,8 +36,11 @@ export class DocUploadComponent implements OnInit {
   constructor(private commonService: CommonService) { }
 
   ngOnInit(): void {
-    const docId = '687832316147'
-    this.listTable(docId);
+    // const docId = '687832316147'
+    if(this.commonService.userId){
+      this.listTable(this.commonService.userId);
+    }
+    
   }
 
   onFilechange(event: any) {
@@ -55,12 +58,12 @@ export class DocUploadComponent implements OnInit {
   deleteFile(data:string){
     console.log('file', data)
     const filedata = {
-      "doc_id": "687832316147",
+      "doc_id": this.commonService.userId,
       "file_name": data
     }
     this.commonService.filedelete(filedata).subscribe(x=>{
       console.log('file delete: ', data)
-      this.listTable('687832316147');
+      this.listTable(this.commonService.userId);
     })
   }
 

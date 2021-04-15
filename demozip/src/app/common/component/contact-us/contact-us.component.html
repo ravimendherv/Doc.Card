@@ -1,0 +1,82 @@
+<div class="form-style">
+
+    <form  style="color: #757575;" [formGroup]="contactForm" >
+        <mat-card class="p-0">
+
+            <mat-card-header class="info-color headerBg white-text text-center py-4">
+                <div class="contactUs text-white">Contact us</div>
+            </mat-card-header>
+
+
+            <div class="row p-5">
+                <div class="col-12 w-100 pb-4 float-left">
+                    <mat-form-field>
+                        <mat-label>Name</mat-label>
+                        <input formControlName="contactFormName" matInput placeholder="Name">
+                        <mat-hint style="color: red;" *ngIf="g.contactFormName.touched && g.contactFormName.errors?.required">
+                            Name is Required
+                        </mat-hint>
+                        
+                    </mat-form-field>
+                </div>
+
+                <div class="col-12 w-100 pb-4 float-left">
+                    <mat-form-field>
+                        <mat-label>E-mail</mat-label>
+                        <input type="email" formControlName="contactFormEmail" matInput placeholder="E-mail">
+                        <mat-hint style="color: red;" *ngIf="g.contactFormEmail.touched && g.contactFormEmail.errors?.required">
+                            E-mail is Required
+                        </mat-hint>
+                        
+                    </mat-form-field>
+                </div>
+
+                <div class="col-12 w-100 pb-4 float-left">
+                    <mat-label class="text-center float-left w-100 font-weight-bold">Subject</mat-label>
+                    
+                    <mat-form-field>
+                        
+                        <mat-select formControlName="contactFormSubjects" placeholder="Choose your option">
+                        <mat-option *ngFor="let val of optionsSelect" [value]="val.value">
+                            {{val.label}}
+                        </mat-option>
+                        </mat-select>
+                        <mat-hint style="color: red;" *ngIf="g.contactFormSubjects.touched && g.contactFormSubjects.errors?.required">
+                            Subject is Required
+                        </mat-hint>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-12 w-100 pb-4 float-left">
+                    <mat-form-field>
+                        <mat-label>Leave a comment</mat-label>
+                        <textarea formControlName="contactFormMessage" matInput placeholder="Message"></textarea>
+                        <mat-hint style="color: red;" *ngIf="g.contactFormMessage.touched && g.contactFormMessage.errors?.required">
+                            Comment is Required
+                        </mat-hint>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-12 w-100 pb-4 float-left">
+                    <!-- <mat-form-field>
+                        <mat-checkbox  formControlName="contactFormCopy">Send me a copy of this message
+                        </mat-checkbox>
+                        <mat-checkbox  formControlName="contactFormCopy" name="Check me!"></mat-checkbox>
+                    </mat-form-field> -->
+                </div>
+
+                <div class="col-12 px-5 text-center float-left">
+                    <button class="w-100 button-style" color="info" outline="true" rounded="true" [disabled]="disabledSubmitButton" (click)="onSubmit()" mat-raised-button color='primary'>Send</button>
+                </div>
+            </div>
+
+
+            <!-- <button matBtn color="info" outline="true" rounded="true" block="true" class="z-depth-0 my-4 waves-effect"
+                matWavesEffect type="submit" [disabled]="disabledSubmitButton">
+                Send
+            </button> -->
+
+        </mat-card>
+    </form>
+
+</div>

@@ -1,6 +1,6 @@
 <div class="form-style">
 
-    <form  style="color: #757575;" [formGroup]="contactForm" >
+    <form  #contactform=ngForm style="color: #757575;" [formGroup]="contactForm" >
         <mat-card class="p-0">
 
             <mat-card-header class="info-color headerBg white-text text-center py-4">
@@ -12,7 +12,7 @@
                 <div class="col-12 w-100 pb-4 float-left">
                     <mat-form-field>
                         <mat-label>Name</mat-label>
-                        <input formControlName="contactFormName" matInput placeholder="Name">
+                        <input #Username formControlName="contactFormName" matInput placeholder="Name">
                         <mat-hint style="color: red;" *ngIf="g.contactFormName.touched && g.contactFormName.errors?.required">
                             Name is Required
                         </mat-hint>
@@ -23,7 +23,7 @@
                 <div class="col-12 w-100 pb-4 float-left">
                     <mat-form-field>
                         <mat-label>E-mail</mat-label>
-                        <input type="email" formControlName="contactFormEmail" matInput placeholder="E-mail">
+                        <input #Emailid type="email" formControlName="contactFormEmail" matInput placeholder="E-mail">
                         <mat-hint style="color: red;" *ngIf="g.contactFormEmail.touched && g.contactFormEmail.errors?.required">
                             E-mail is Required
                         </mat-hint>
@@ -49,7 +49,7 @@
                 <div class="col-12 w-100 pb-4 float-left">
                     <mat-form-field>
                         <mat-label>Leave a comment</mat-label>
-                        <textarea formControlName="contactFormMessage" matInput placeholder="Message"></textarea>
+                        <textarea #comment formControlName="contactFormMessage" matInput placeholder="Message"></textarea>
                         <mat-hint style="color: red;" *ngIf="g.contactFormMessage.touched && g.contactFormMessage.errors?.required">
                             Comment is Required
                         </mat-hint>
@@ -65,7 +65,7 @@
                 </div>
 
                 <div class="col-12 px-5 text-center float-left">
-                    <button class="w-100 button-style" color="info" outline="true" rounded="true" [disabled]="disabledSubmitButton" (click)="onSubmit()" mat-raised-button color='primary'>Send</button>
+                    <button class="w-100 button-style" color="info" outline="true" rounded="true" (click)="onSubmit()" mat-raised-button color='primary' [disabled]="Username.value == '' || Emailid.value == '' || comment.value == '' || !contactform.valid" (click)="contactform.reset({})">Send</button>
                 </div>
             </div>
 
