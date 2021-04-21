@@ -1,4 +1,4 @@
-<div class="container container-paddinng text-dark" style="background-color:white">
+<div class="container container-paddinng text-dark " >
     <div class="row">
         <div class="col-12 text-right"> 
             <h1 style="text-align:center; padding-top:15px;">User Profile</h1>
@@ -43,19 +43,15 @@
                     
                 </mat-form-field>
             </div>
-            <!-- <div>
-                <mat-form-field class="col-12 col-md-6  pb-3 float-left">
-                    <mat-label></mat-label>
-                    <input matInput  value="Mendhe">
-                </mat-form-field>
-            </div>  -->
-            <div class="col-12 col-md-6  pb-3 float-left"  >
+            <div class="col-12 col-md-6  pb-3 float-left" [hidden]="hideotp " >
                 <mat-form-field>
                     <mat-label>Enter Email OTP</mat-label>
-                    <input #Firstname formControlName="emailotp" matInput >
-                    <mat-icon mat-list-icon matSuffix > verified_user</mat-icon>
+                    <input formControlName="emailotp" matInput >
+                    <mat-icon mat-list-icon matSuffix > send</mat-icon>
                     
-                </mat-form-field>
+                </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                
+                <mat-icon mat-list-icon matSuffix > cached</mat-icon>
             </div>
         </div>
     </div>
@@ -71,6 +67,16 @@
                     <mat-icon mat-list-icon matSuffix  (click)="savephonechanges()" [hidden]="savephone " (click)="savephone = !savephone "> send</mat-icon>
                     
                 </mat-form-field>
+            </div>
+            <div class="col-12 col-md-6  pb-3 float-left" [hidden]="hidemobotp " >
+                <mat-form-field>
+                    <mat-label>Enter Email OTP</mat-label>
+                    <input formControlName="mobotp" matInput >
+                    <mat-icon mat-list-icon matSuffix > send</mat-icon>
+                    
+                </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                
+                <mat-icon mat-list-icon matSuffix > cached</mat-icon>
             </div>
         </div>
     </div>

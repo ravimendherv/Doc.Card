@@ -10,6 +10,8 @@ import { Router } from '@angular/router';
 export class DocCardComponent implements OnInit {
 
   carddetails:boolean = true;
+  up:boolean = true;
+  down:boolean = false;
 
   constructor(private formBuilder:FormBuilder, private router: Router) { }
 
@@ -40,9 +42,13 @@ export class DocCardComponent implements OnInit {
   cardrequest() {
     if (this.carddetails == true) {
       this.carddetails = false;
+      this.up = false;
+      this.down = true;
     }
     else if (this.carddetails == false) {
       this.carddetails = true;
+      this.up = true;
+      this.down = false;
       // this.doccardinfo;
     }
     
