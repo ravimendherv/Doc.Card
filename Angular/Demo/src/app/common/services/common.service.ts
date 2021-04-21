@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, retry } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { EmailToUsername, EmailVerificationAtRegistaration, FileDownload, FileUpload, HistFileList, Login, outSideAuthToken, ReceicerRegistration, SenderKey, SenderRegistration, SmsVerificationAtRegistaration, UserCreate } from '../modal/Registration';
+import { CardImg, EmailToUsername, EmailVerificationAtRegistaration, FileDownload, FileToReceiver, FileUpload, GetDocFromUser, HistFileList, Login, NotifyCount, NotifyList, outSideAuthToken, ReceicerRegistration, SenderKey, SenderRegistration, SmsVerificationAtRegistaration, UserCreate } from '../modal/Registration';
 import { CustomCommonService } from './custom-common.service';
 
 @Injectable({
@@ -18,6 +18,11 @@ export class CommonService {
   access:any;
   refresh:any;
   userId:any;
+  userType ='';
+  userEmail:any;
+  userName:any;
+  showUName:any;
+
 
 
   constructor(private http: HttpClient, private customCommonService: CustomCommonService) { }
@@ -133,7 +138,8 @@ export class CommonService {
         "Authorization": "Token "+ this.tokenval
       })
     };
-    return this.http.post<ReceicerRegistration>(this.baseUrl+ '/api/ReceicerRegistration/', data, outsidehttpOptions)
+    
+    return this.http.post<ReceicerRegistration>(this.baseUrl+ '/api/ReceicerRegistrationProcessViews/', data, outsidehttpOptions)
       .pipe(
         catchError(this.handleError)
       );
@@ -224,6 +230,89 @@ export class CommonService {
       );
   }
 
+  sendrFileList(docId:string): Observable<any> {
+    const insidesidehttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        "Authorization": "Bearer "+ this.access
+      })
+    };
+    return this.http.get(this.baseUrl+ '/getData/?username='+ docId, insidesidehttpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  docImg(): Observable<CardImg> {
+    const insidesidehttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        "Authorization": "Bearer "+ this.access
+      })
+    };
+    const data = {
+      "doc_id":this.userId
+    } 
+
+    return this.http.post<CardImg>(this.baseUrl+ '/getcard/', data, insidesidehttpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  receiverNotify(): Observable<NotifyCount> {
+    const insidesidehttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        "Authorization": "Bearer "+ this.access
+      })
+    };
+    const data = {
+      "doc_id":this.userId
+    } 
+
+    return this.http.post<NotifyCount>(this.baseUrl+ '/getNotificationCount/', data, insidesidehttpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  sendFileToReceiver(receiverId:string, fileName:string): Observable<FileToReceiver> {
+    const insidesidehttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        "Authorization": "Bearer "+ this.access
+      })
+    };
+    const data = {
+      "doc_id": this.userId,
+      "receiver_doc_id": receiverId,
+      "file_name": fileName
+    } 
+
+    return this.http.post<FileToReceiver>(this.baseUrl+ '/file_upload/FileDownloaderView/', data, insidesidehttpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  receiverNotifyList(): Observable<NotifyList> {
+    const insidesidehttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        "Authorization": "Bearer "+ this.access
+      })
+    };
+    const data = {
+      "username":this.userId
+    } 
+
+    return this.http.post<NotifyList>(this.baseUrl+ '/api/getNotificationList/', data, insidesidehttpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
   histFileList(docId:string): Observable<HistFileList> {
     const insidesidehttpOptions = {
       headers: new HttpHeaders({
@@ -232,10 +321,29 @@ export class CommonService {
       })
     };
     const data = {
-      "username":"109677101076"
+      "username":this.userId
     } 
 
     return this.http.post<HistFileList>(this.baseUrl+ '/api/getHistoryList/', data, insidesidehttpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  getDocFromUser(senderid:string,fileNameList:string,otptype:string): Observable<GetDocFromUser> {
+    const insidesidehttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        "Authorization": "Bearer "+ this.access
+      })
+    };
+    const data = {
+      "doc_id": senderid,
+      "f_name": fileNameList,
+      "gender": otptype
+    } 
+
+    return this.http.post<GetDocFromUser>(this.baseUrl+ '/receiveDocumentsendotp/', data, insidesidehttpOptions)
       .pipe(
         catchError(this.handleError)
       );
@@ -257,13 +365,7 @@ export class CommonService {
 
   
   fileUpload(filedata:FormData): Observable<any> {
-    // const insidesidehttpOptions = {
-    //   headers: new HttpHeaders({
-    //     'Content-Type':  'application/json',
-    //     "Authorization": "Bearer "+this.access
-    //   })
-    // }; 
-
+   
     let params = new HttpParams();
 
     const options = {
@@ -274,6 +376,30 @@ export class CommonService {
     };
     
     return this.http.post(`${this.baseUrl}/file_upload/FileUploadView/`, filedata, options)
+      // .pipe(
+      //   // catchError(this.handleError)
+      //   map((event: any) => {
+      //     if (event.type == HttpEventType.UploadProgress) {
+      //       this.progress = Math.round((100 / event.total) * event.loaded);
+      //     } else if (event.type == HttpEventType.Response) {
+      //       this.progress = 0;
+      //     }
+      //   }
+      // ));
+  }
+
+  pngfileUpload(filedata:FormData): Observable<any> {
+   
+    let params = new HttpParams();
+
+    const options = {
+      headers: new HttpHeaders().set('Authorization', "Bearer "+this.access),
+      params: params,
+      reportProgress: true,
+      withCredentials: true,
+    };
+    
+    return this.http.post(`${this.baseUrl}/file_upload/ImageFileUploardView/`, filedata, options)
       // .pipe(
       //   // catchError(this.handleError)
       //   map((event: any) => {

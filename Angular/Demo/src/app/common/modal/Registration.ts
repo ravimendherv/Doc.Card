@@ -60,7 +60,11 @@ export interface Login {
     "refresh": string,
     "access": string,
     "username": string,
-    "usertype": string
+    "usertype": string,
+    "otp": string,
+    "email": string,
+    "detail": string,
+    "name": string
 
 }
 
@@ -70,4 +74,31 @@ export interface  HistFileList{
 "time": string,
 "action": string,
 "performed": string
+}
+
+export interface  CardImg{
+    "front_side": string,
+    "back_side": string
+
+}
+
+export interface  NotifyCount{
+    "count": string
+
+}
+
+export interface  NotifyList{
+    "name": string,
+    "date": string,
+    "time" : string,
+    "path": string,
+    "from" : string
+}
+
+export interface  FileToReceiver{
+    "status": string;
+}
+
+export interface GetDocFromUser {
+    "otp": string
 }

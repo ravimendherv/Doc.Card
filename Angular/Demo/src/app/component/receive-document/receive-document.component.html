@@ -32,8 +32,8 @@
                             
                     <mat-select formControlName="contactFormSubjects" placeholder="Select File" [(value)]="showval" multiple>
                     
-                        <mat-option *ngFor="let val of optionsSelect" [value]="val.value">
-                            {{val.label}}
+                        <mat-option *ngFor="let val of optionsSelect" [value]="val">
+                            {{val}}
                         </mat-option>
                     </mat-select>
                     <mat-hint style="color: red;" *ngIf="g.contactFormSubjects.touched && g.contactFormSubjects.errors?.required">
@@ -45,8 +45,8 @@
                 <div class="col-12 pb-3 float-left">
                     <mat-radio-group formControlName="otptype" class="margin-left">
                         <mat-label>OTP Type:</mat-label>&nbsp;
-                        <mat-radio-button value="Email">Email</mat-radio-button>&nbsp;
-                        <mat-radio-button value="Mobile">Mobile</mat-radio-button>
+                        <mat-radio-button value="0">Email</mat-radio-button>&nbsp;
+                        <mat-radio-button value="1">Mobile</mat-radio-button>
                     </mat-radio-group>
                 </div>
 

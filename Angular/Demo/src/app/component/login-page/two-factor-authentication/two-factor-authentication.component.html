@@ -1,0 +1,46 @@
+<div class="form-style">
+
+    <form #twofactor=ngForm style="color: #757575;" [formGroup]="twoauth">
+        <mat-card class="p-0">
+            <mat-card-header class="info-color headerBg white-text text-center py-4">
+                <div class="twoverify text-white">Doc.Card Device Verification</div>
+            </mat-card-header>
+
+            <div class="row p-5">
+
+                <div class="col-12 w-100 pb-4 text-center">
+                    <img src="\assets\images\doc.png" class="img-rounded" alt="DocCard Logo" width="150" height="100">
+                </div>
+
+                <div class="col-12 w-100 pb-4 float-left">
+                    
+                    <mat-form-field>
+                        <mat-label>Enter 4-Digit OTP</mat-label>
+                        <input #otpval formControlName="otp" matInput placeholder="4-Digit OTP" type="tel" minlength="4" maxlength="4" (keypress)="keyPress($event)" >
+                        <mat-hint style="color: red;" *ngIf="g.otp.touched && g.otp.errors?.required">
+                            OTP is Required
+                        </mat-hint>
+                    </mat-form-field>
+                    
+                </div>
+
+                <div class="col-12 px-5 text-center float-left">
+                    <button class="w-100 button-style" color="info" outline="true" rounded="true" (click)="onSubmit()" mat-raised-button color='primary' [disabled]="otpval.value == '' || !twofactor.valid" (click)="twofactor.reset({})">Send</button>
+                </div>
+
+                <div class="col-12 px-5 text-center float-left">
+                  
+                        <span> We just sent your authentication code via email to {{uEmail}}</span><br>
+                        <span> The code will expire at 12:36PM IST.</span><br>
+                        <span> Re-send the code</span><br>
+                        <span>
+                            If you'd like to automatically verify devices in the future, consider enabling two-factor authentication on your account. 
+                        </span>
+                   
+                </div>
+            </div>
+        </mat-card>
+    </form>
+
+</div>
+

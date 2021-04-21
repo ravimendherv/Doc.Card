@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms'
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { CommonService } from 'src/app/common/services/common.service';
 import { CustomCommonService } from 'src/app/common/services/custom-common.service';
 
@@ -16,6 +16,8 @@ export class LoginPageComponent implements OnInit {
   emailUserval: string = '';
   passVal: string = '';
   userVal: string = '';
+  authOtp='';
+  apiUserType ='';
 
   ngOnInit() {
     this.cap();
@@ -61,9 +63,9 @@ export class LoginPageComponent implements OnInit {
         this.commonService.email_to_username(this.loginform.value.username).subscribe(res => {
           this.emailUserval = res.username;
           this.passVal = this.loginform.value.password
-
+          this.routeByUserType(this.loginform.value.usertype,this.emailUserval,this.passVal);
         })
-       this.routeByUserType(this.loginform.value.usertype,this.emailUserval,this.passVal);
+       
 
 
       } else{
@@ -104,29 +106,28 @@ export class LoginPageComponent implements OnInit {
   };
 
   routeByUserType(val:string, userName:string, pass:string){
-    if(val == '0'){
+    this.commonService.userType = val;    
       this.commonService.login(userName, pass).subscribe(res => {
-        console.log(res);
-        this.commonService.access = res.access;
-        this.commonService.refresh = res.refresh;
-        this.commonService.userId = res.username;
-        // this.resetlogin();
+       
+        if(val == res.usertype){
+          this.commonService.access = res.access;
+          this.commonService.refresh = res.refresh;
+          this.commonService.userId = res.username;
+          this.authOtp =res.otp;
+          this.apiUserType = res.usertype;
+          this.commonService.userEmail = res.email;
+          this.commonService.userName = res.name;
+          this.router.navigate(['/two-factor'], { state: { userType: val , authotp: this.authOtp} });
+        } else {
+          alert('Please choose correct userType');
+          this.router.navigateByUrl('/login');
+        }
+        
+      }, err =>{
+        alert('Enter correct username and password');
+          this.router.navigateByUrl('/login');
       });
-      // this.resetlogin();
-      this.router.navigate(['/senderdashboard']);
-
-    } else if(val== '1'){
-      this.commonService.login(userName, pass).subscribe(res => {
-        console.log(res);
-        this.commonService.access = res.access;
-        this.commonService.refresh = res.refresh;
-        this.commonService.userId = res.username;
-        // this.resetlogin();
-      });
-      // this.resetlogin();
-      this.router.navigate(['/receiverdashboard']);
-    }
-
+      
   }
 
   resetlogin() {

@@ -6,15 +6,21 @@ import { ReceiverDashboardComponent } from './component/dashboard/receiver-dashb
 import { SenderDashboardComponent } from './component/dashboard/sender-dashboard/sender-dashboard.component';
 import { DocTransactionComponent } from './component/doc-transaction/doc-transaction.component';
 import { DocUploadComponent } from './component/doc-upload/doc-upload.component';
+import { HomePageComponent } from './component/home-page/home-page.component';
 import { LoginPageComponent } from './component/login-page/login-page.component';
+import { TwoFactorAuthenticationComponent } from './component/login-page/two-factor-authentication/two-factor-authentication.component';
 import { RegistrationPageComponent } from './component/registration-page/registration-page.component';
 import { ResetPasswordComponent } from './component/reset-password/reset-password.component';
 
 const routes: Routes = [
+  // { path:'', redirectTo: '/home-page', pathMatch: 'full'},
+  // { path:'', component: HomePageComponent},
+  { path:'home-page', component: AppComponent},
   { path:'register', component: RegistrationPageComponent},
   { path:'login', component: LoginPageComponent},
   { path:'contactUs', component: ContactUsComponent},
   { path:'reset-password', component: ResetPasswordComponent},
+  { path:'two-factor', component: TwoFactorAuthenticationComponent},
 
   { path:'sender_dashboard', component:SenderDashboardComponent,
     children: [
@@ -62,8 +68,8 @@ const routes: Routes = [
       
     ]
   },
-  // { path:'sender_dashboard', component: SenderDashboardComponent},
-  // { path:'doc', component: DocUploadComponent},
+  
+  { path:'doc', component: DocUploadComponent},
   // { path:'doctransation', component: DocTransactionComponent},
   // { path:'receiver_dashboard', component: ReceiverDashboardComponent},
  

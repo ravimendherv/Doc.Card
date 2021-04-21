@@ -22,6 +22,7 @@ export class FileUploadComponent implements OnInit {
   }
 
   name = "Angular " + VERSION.major;
+  fileTypeVal = '';
 
   lines: any = [];
   linesR: any = [];
@@ -40,14 +41,27 @@ export class FileUploadComponent implements OnInit {
 
   onSubmit() {
     // this.onFileEmit.emit(this.form.value.docId);
-    const formData: FormData = new FormData();
-    formData.append('doc_id', this.commonApicallService.userId);
-    formData.append('input_file', this.filedata);
-    formData.append('file_name', this.form.value.fileName);
+    if(this.fileTypeVal == 'png'){
+        const formData: FormData = new FormData();
+        formData.append('doc_id', this.commonApicallService.userId);
+        formData.append('input_file', this.filedata);
+        formData.append('file_name', this.form.value.fileName+'^');
 
-    this.commonApicallService.fileUpload(formData).subscribe(x=>{
-      this.onFileEmit.emit(this.commonApicallService.userId);      
-    })
+        this.commonApicallService.pngfileUpload(formData).subscribe(x=>{
+          this.onFileEmit.emit(this.commonApicallService.userId);      
+        });
+
+    } else if(this.fileTypeVal == 'pdf'){
+        const formData: FormData = new FormData();
+        formData.append('doc_id', this.commonApicallService.userId);
+        formData.append('input_file', this.filedata);
+        formData.append('file_name', this.form.value.fileName);
+    
+        this.commonApicallService.fileUpload(formData).subscribe(x=>{
+          this.onFileEmit.emit(this.commonApicallService.userId);      
+        });
+    }
+    
     // .pipe(
     //   map((event: any) => {
     //     if (event.type == HttpEventType.UploadProgress) {
@@ -120,8 +134,7 @@ export class FileUploadComponent implements OnInit {
       console.log("File Type from Main : " + c[1]);
       if (c[1] == 'pdf' || c[1] == 'png') {
 
-        // alert("Match");
-
+        this.fileTypeVal = c[1];
       }
       else {
         event.srcElement.value = null;

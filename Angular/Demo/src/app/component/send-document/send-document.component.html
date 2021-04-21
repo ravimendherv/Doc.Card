@@ -24,8 +24,8 @@
                         
                 <mat-select formControlName="contactFormSubjects" placeholder="Select File" [(value)]="showval" multiple>
                    
-                    <mat-option *ngFor="let val of optionsSelect" [value]="val.value">
-                        {{val.label}}
+                    <mat-option *ngFor="let val of optionsSelect" [value]="val">
+                        {{val}}
                     </mat-option>
                 </mat-select>
                 <mat-hint style="color: red;" *ngIf="g.contactFormSubjects.touched && g.contactFormSubjects.errors?.required">

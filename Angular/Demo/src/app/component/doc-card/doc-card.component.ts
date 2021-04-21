@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms'
 import { Router } from '@angular/router';
+import { CommonService } from 'src/app/common/services/common.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-doc-card',
@@ -10,10 +12,22 @@ import { Router } from '@angular/router';
 export class DocCardComponent implements OnInit {
 
   carddetails:boolean = true;
+  fCard='';
+  bCard='';
+  baseUrl = environment.baseURL;
 
-  constructor(private formBuilder:FormBuilder, private router: Router) { }
+  constructor(private formBuilder:FormBuilder, private router: Router,private commonService: CommonService) { }
 
   ngOnInit(): void {
+    this.getCard();
+  }
+
+  getCard(){
+    this.commonService.docImg().subscribe(x=>{
+      this.fCard = this.baseUrl+x.front_side;
+      this.bCard = this.baseUrl+x.back_side;
+    });
+
   }
 
   doccardinfo = this.formBuilder.group({

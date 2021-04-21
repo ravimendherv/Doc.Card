@@ -9,19 +9,20 @@ import { CommonService } from 'src/app/common/services/common.service';
 export class NotificationComponent implements OnInit {
 
   // displayedColumns = ['position','senderid','name', 'date', 'time', 'accept', 'deneid'];
-  displayedColumns = ['position','name', 'date', 'time', 'action', 'performed'];
+  displayedColumns = ['position','name', 'date', 'time', 'from', 'action'];
   dataSource: any;
+  
 
   constructor(private commonService: CommonService) { }
 
   ngOnInit() {
     if(this.commonService.userId){
-      this.listTable(this.commonService.userId);
+      this.listTable();
     }
   }
 
-  listTable(data:string){
-    this.commonService.histFileList(data).subscribe(res=>{
+  listTable(){
+    this.commonService.receiverNotifyList().subscribe(res=>{
       console.log('data',res)
       this.dataSource = res;
     })
