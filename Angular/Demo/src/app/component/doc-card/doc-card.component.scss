@@ -1,3 +1,27 @@
+.mat-card {
+  background-color: #c2eaba;
+background-image: linear-gradient(319deg, #c2eaba 0%, #c5f4e0 37%, #efc2cf 100%);
+
+}
+
+.button-style{
+  border-radius: 5vw;
+  // background: #fff;
+  // color: #33b5e5;
+  border: 1px solid;
+  width: 15vw;  
+  background-color: #05e8ba;
+  background-image: linear-gradient(315deg, #05e8ba 0%, #087ee1 74%);
+  
+  
+}
+
+.cardbtn {
+  background-color: #000000;
+background-image: linear-gradient(147deg, #000000 0%, #04619f 74%);
+
+}
+
 //   -------------------------Doc. Card SCSS--------------------
 
 .flip-card {
@@ -32,15 +56,11 @@
     backface-visibility: hidden;
   }
   
-  /* Style the front side (fallback if image is missing) */
-  // .flip-card-front {
-  //   background-color: #bbb;
-  //   color: black;
-  // }
-  
   /* Style the back side */
   .flip-card-back {
     // background-color: dodgerblue;
     // color: white;
     transform: rotateY(180deg);
   }
+
+  

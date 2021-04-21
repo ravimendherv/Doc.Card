@@ -15,6 +15,8 @@ export class DocCardComponent implements OnInit {
   fCard='';
   bCard='';
   baseUrl = environment.baseURL;
+  up:boolean = true;
+  down:boolean = false;
 
   constructor(private formBuilder:FormBuilder, private router: Router,private commonService: CommonService) { }
 
@@ -54,9 +56,13 @@ export class DocCardComponent implements OnInit {
   cardrequest() {
     if (this.carddetails == true) {
       this.carddetails = false;
+      this.up = false;
+      this.down = true;
     }
     else if (this.carddetails == false) {
       this.carddetails = true;
+      this.up = true;
+      this.down = false;
       // this.doccardinfo;
     }
     

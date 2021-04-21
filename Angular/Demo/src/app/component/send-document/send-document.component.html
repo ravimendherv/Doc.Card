@@ -1,5 +1,5 @@
 <form [formGroup]="sendfile" class="form_style">
-    <mat-card class="p-5">
+    <mat-card class="row">
         
         <div class="row">
             <div class="col-12 pb-3 float-left">
@@ -9,8 +9,8 @@
             </div>
         </div>
     
-        <div class="row">
-            <div class="col-12 pb-3 float-left">
+        <div class="row text-center ">
+            <div class="col-12 pb-3 w-100 ">
                 <mat-form-field>
                     <mat-label>Receiver's Doc. Id</mat-label>
                     <input formControlName="receiverid"  matInput placeholder="Receiver's Doc. Id" type="tel" minlength="12" maxlength="12" (keypress)="keyPress($event)" >
@@ -20,7 +20,9 @@
                 </mat-form-field>
             </div>
 
-            <mat-form-field>
+            <div class="col-12 pb-3 w-100 ">    
+                <mat-form-field>
+                
                         
                 <mat-select formControlName="contactFormSubjects" placeholder="Select File" [(value)]="showval" multiple>
                    
@@ -32,12 +34,12 @@
                     Please Select File.
                 </mat-hint>
             </mat-form-field>
+            </div>
               
-            
-            <div>
-                <div class="col-12 px-5 text-center float-left">
-                    <button class="w-100 button-style" color="info" outline="true" rounded="true"   (click)="filesend()" mat-raised-button color='primary'>Send</button>
-                </div>
+            <div class="col-12 pb-3 ">
+                
+                    <button class=" text-center button-style " color="info" outline="true" rounded="true" (click)="filesend()" mat-raised-button>Send</button>
+               
             </div>
             
         </div>

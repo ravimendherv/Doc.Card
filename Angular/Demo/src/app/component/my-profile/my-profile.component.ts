@@ -16,6 +16,11 @@ export class MyProfileComponent implements OnInit {
   editphone:boolean = true;
   gmailotp:boolean = true;
 
+  hideotp:boolean = true;
+  flag:boolean = false;
+  hidemobotp:boolean = true;
+  flag1:boolean = false;
+
   constructor() { }
 
   ngOnInit(): void {
@@ -25,13 +30,27 @@ export class MyProfileComponent implements OnInit {
     if (this.savegmail == true) {
     this.editgmail = false;
     this.savegmail = false;
+    
+    if (this.flag1 == true) {
+      this.hidemobotp = true;
+      this.flag1 = false;
+    }
+
+    if (this.flag == true) {
+      this.hideotp = true;
+      this.flag = false;
+    }
+
     }
     else if (this.savegmail == false) {
       this.editgmail = true;
       this.savegmail = true;
       this.gmailotp = true;
       this.uneditgmail = false;
+
+
     }
+    
     
   }
 
@@ -39,17 +58,33 @@ export class MyProfileComponent implements OnInit {
     this.editgmail = true;
     this.uneditgmail = true;
     this.gmailotp = true;
+    this.hideotp = false;
+    this.flag = true;
+    this.flag1 = true;
+
   }
 
   editphonevalue() {
     if (this.savephone == true) {
     this.editphone = false;
     this.savephone = false;
+
+    if (this.flag1 == true) {
+      this.hideotp = true;
+      this.flag1 = false;
+    }
+
+    if (this.flag == true) {
+      this.hidemobotp = true;
+      this.flag1 = false;
+    }
     }
     else if (this.savephone == false) {
       this.editphone = true;
       this.savephone = true;
       this.uneditphone = false;
+
+      
     }
     
   }
@@ -57,6 +92,10 @@ export class MyProfileComponent implements OnInit {
   savephonechanges() {
     this.editphone = true;
     this.uneditphone = true;
+    this.hidemobotp = false;
+    this.flag = true;
+
+    this.flag1 = true;
   }
 
 }
