@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms'
 import { NavigationExtras, Router } from '@angular/router';
+import { CHOOSE_USERTYPE, CORRECT_USERNAME_PASS, ENTER_CAPTCH, FILL_ALL_DETAILS, WARNING_COLOR, WARNING_HEADER, WARNING_IMG } from 'src/app/common/constant/constantFile';
 import { CommonService } from 'src/app/common/services/common.service';
 import { CustomCommonService } from 'src/app/common/services/custom-common.service';
 
@@ -18,6 +19,7 @@ export class LoginPageComponent implements OnInit {
   userVal: string = '';
   authOtp='';
   apiUserType ='';
+  loaderval = false;
 
   ngOnInit() {
     this.cap();
@@ -49,7 +51,7 @@ export class LoginPageComponent implements OnInit {
   };
 
   loginsubmit(){
-
+    this.loaderval = true;
     this.customCommonService.on('token data').subscribe((res) =>{
       this.tokenval= res;
     })
@@ -59,28 +61,43 @@ export class LoginPageComponent implements OnInit {
     if (this.loginform.valid) { 
 
       if(this.loginform.value.username.indexOf(substring) !== -1){
-        // alert('Email')
         this.commonService.email_to_username(this.loginform.value.username).subscribe(res => {
           this.emailUserval = res.username;
           this.passVal = this.loginform.value.password
-          this.routeByUserType(this.loginform.value.usertype,this.emailUserval,this.passVal);
-        })
+          if(this.capp == this.loginform.value.captinput){
+            this.routeByUserType(this.loginform.value.usertype,this.emailUserval,this.passVal);
+            
+          } else {
+            this.customCommonService.OpenModal(WARNING_HEADER,ENTER_CAPTCH,WARNING_IMG,WARNING_COLOR,'');
+            this.loaderval = false;
+          }
+          
+        }, error => {
+          this.loaderval = false;
+          this.customCommonService.errorHandling(error); 
+        }
+        );
        
 
 
       } else{
-        // alert('Id')
         this.userVal = this.loginform.value.username;
         this.passVal = this.loginform.value.password
+        if(this.capp == this.loginform.value.captinput){
         this.routeByUserType(this.loginform.value.usertype,this.userVal,this.passVal);
+        
+        } else {
+          this.customCommonService.OpenModal(WARNING_HEADER,ENTER_CAPTCH,WARNING_IMG,WARNING_COLOR,'');
+          this.loaderval = false;
+        }
 
         
       }
 
-      // alert('Form Submitted succesfully!!!\n Check the values in browser console.');  
       console.log(this.loginform.value);  
     }else{
-      alert('Please Fill All the Details.');
+      this.customCommonService.OpenModal(WARNING_HEADER,FILL_ALL_DETAILS,WARNING_IMG,WARNING_COLOR,'');
+      this.loaderval = false;
     }
   };
 
@@ -106,26 +123,27 @@ export class LoginPageComponent implements OnInit {
   };
 
   routeByUserType(val:string, userName:string, pass:string){
-    this.commonService.userType = val;    
+    this.customCommonService.userType = val;    
       this.commonService.login(userName, pass).subscribe(res => {
        
         if(val == res.usertype){
-          this.commonService.access = res.access;
-          this.commonService.refresh = res.refresh;
-          this.commonService.userId = res.username;
+          this.customCommonService.access = res.access;
+          this.customCommonService.refresh = res.refresh;
+          this.customCommonService.userId = res.username;
           this.authOtp =res.otp;
           this.apiUserType = res.usertype;
-          this.commonService.userEmail = res.email;
-          this.commonService.userName = res.name;
+          this.customCommonService.userEmail = res.email;
+          this.customCommonService.userName = res.name;
           this.router.navigate(['/two-factor'], { state: { userType: val , authotp: this.authOtp} });
+          this.loaderval = false;
         } else {
-          alert('Please choose correct userType');
-          this.router.navigateByUrl('/login');
+          this.customCommonService.OpenModal(WARNING_HEADER,CHOOSE_USERTYPE,WARNING_IMG,WARNING_COLOR,'/login');
+          this.loaderval = false;
         }
         
       }, err =>{
-        alert('Enter correct username and password');
-          this.router.navigateByUrl('/login');
+        this.customCommonService.OpenModal(WARNING_HEADER,CORRECT_USERNAME_PASS,WARNING_IMG,WARNING_COLOR,'/login');
+          this.loaderval = false;
       });
       
   }

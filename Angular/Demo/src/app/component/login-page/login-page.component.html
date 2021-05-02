@@ -1,3 +1,5 @@
+<app-page-loader [isSmallLoader]="true" *ngIf="loaderval"></app-page-loader>
+
 <form #loginForm= ngForm [formGroup]="loginform" class="form_style">
     <mat-card class="p-4">
         <!-- <mat-card-header class="w-100">
@@ -29,7 +31,7 @@
             <div class="col-12 pb-3 float-left">
                 <mat-form-field>
                     <mat-label>Password</mat-label>
-                    <input #Pass formControlName="password"  [type]="hide ? 'password' : 'text' " matInput placeholder="Password" >
+                    <input #Pass formControlName="password" appBlockCopyPaste  [type]="hide ? 'password' : 'text' " matInput placeholder="Password" >
                     
                     <button mat-icon-button matSuffix (click)=" hide = !hide" [attr.aria-label]="'Hide Password'" [attr.aria-pressed]="hide">
                         <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
@@ -62,7 +64,7 @@
             <div class="col-12 pb-3 float-left col-md-12">
                 <mat-form-field>
                     <mat-label>Enter Captcha</mat-label>
-                    <input id="capinput" #Captchaval matInput type="text" formControlName="captinput">
+                    <input id="capinput" #Captchaval matInput type="text" appBlockCopyPaste formControlName="captinput">
                     <mat-hint style="color: red;" *ngIf="g.captinput.touched && g.captinput.errors?.required">
                         Captcha is required
                     </mat-hint>

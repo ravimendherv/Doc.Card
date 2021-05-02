@@ -25,6 +25,8 @@ import { SendDocumentComponent } from './component/send-document/send-document.c
 import { ReceiveDocumentComponent } from './component/receive-document/receive-document.component';
 import { TwoFactorAuthenticationComponent } from './component/login-page/two-factor-authentication/two-factor-authentication.component';
 import { HomePageComponent } from './component/home-page/home-page.component';
+import { PopupModalComponent } from './common/component/popup-modal/popup-modal.component';
+import { BlockCopyPasteDirective } from './common/directives/block-copy-paste.directive';
 
 
 @NgModule({
@@ -48,7 +50,9 @@ import { HomePageComponent } from './component/home-page/home-page.component';
     SendDocumentComponent,
     ReceiveDocumentComponent,
     TwoFactorAuthenticationComponent,
-    HomePageComponent
+    HomePageComponent,
+    PopupModalComponent,
+    BlockCopyPasteDirective
   ],
   imports: [
     BrowserModule,

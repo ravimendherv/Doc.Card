@@ -13,3 +13,11 @@
 .example-spacer {
     flex: 1 1 auto;
   }
+
+  .active-link:focus {
+    background: rgb(120,0,3,0.3);
+  }
+
+  .active-link:active {
+    background: rgb(120,0,3,0.3);
+  }

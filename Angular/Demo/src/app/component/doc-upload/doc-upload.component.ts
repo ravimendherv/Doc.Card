@@ -3,6 +3,7 @@ import {SelectionModel} from '@angular/cdk/collections';
 // import {Component} from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
 import { CommonService } from 'src/app/common/services/common.service';
+import { CustomCommonService } from 'src/app/common/services/custom-common.service';
 
 export interface PeriodicElement {
   name: string;
@@ -33,15 +34,16 @@ export class DocUploadComponent implements OnInit {
   displayedColumns = ['position', 'name', 'action'];
   dataSource: any;
 
-  constructor(private commonService: CommonService) { }
+  constructor(private commonService: CommonService,private customCommonService: CustomCommonService) { }
 
   ngOnInit(): void {
     // const docId = '687832316147'
-    if(this.commonService.userId){
-      this.listTable(this.commonService.userId);
+    if(this.customCommonService.userId){
+      this.listTable(this.customCommonService.userId);
     }
     
   }
+
 
   onFilechange(event: any) {
     console.log('onFilechange', event);
@@ -52,18 +54,22 @@ export class DocUploadComponent implements OnInit {
     this.commonService.uploadeFileList(data).subscribe(res=>{
       console.log('data',res)
       this.dataSource = res;
+    }, error =>{
+      this.customCommonService.errorHandling(error);
     })
   }
 
   deleteFile(data:string){
     console.log('file', data)
     const filedata = {
-      "doc_id": this.commonService.userId,
+      "doc_id": this.customCommonService.userId,
       "file_name": data
     }
     this.commonService.filedelete(filedata).subscribe(x=>{
       console.log('file delete: ', data)
-      this.listTable(this.commonService.userId);
+      this.listTable(this.customCommonService.userId);
+    }, error =>{
+      this.customCommonService.errorHandling(error);
     })
   }
 

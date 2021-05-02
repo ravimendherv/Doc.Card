@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms'
 import { Router } from '@angular/router';
+import { SUCCESS_HEADER, FILL_ALL_DETAILS, SUCCESS_IMG, SUCCESS_COLOR } from 'src/app/common/constant/constantFile';
 import { CommonService } from 'src/app/common/services/common.service';
+import { CustomCommonService } from 'src/app/common/services/custom-common.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -18,7 +20,7 @@ export class DocCardComponent implements OnInit {
   up:boolean = true;
   down:boolean = false;
 
-  constructor(private formBuilder:FormBuilder, private router: Router,private commonService: CommonService) { }
+  constructor(private formBuilder:FormBuilder, private router: Router,private commonService: CommonService, private customCommonService: CustomCommonService) { }
 
   ngOnInit(): void {
     this.getCard();
@@ -28,6 +30,8 @@ export class DocCardComponent implements OnInit {
     this.commonService.docImg().subscribe(x=>{
       this.fCard = this.baseUrl+x.front_side;
       this.bCard = this.baseUrl+x.back_side;
+    }, error =>{
+      this.customCommonService.errorHandling(error);
     });
 
   }
@@ -49,7 +53,7 @@ export class DocCardComponent implements OnInit {
       
       console.log('After Buy Action : ',this.doccardinfo.value);  
     }else{
-      alert('Please Fill All the Details.');
+      this.customCommonService.OpenModal(SUCCESS_HEADER,FILL_ALL_DETAILS,SUCCESS_IMG,SUCCESS_COLOR,'');
     }
   };
 

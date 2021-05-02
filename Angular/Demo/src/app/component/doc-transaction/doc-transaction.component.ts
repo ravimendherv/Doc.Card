@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonService } from 'src/app/common/services/common.service';
+import { CustomCommonService } from 'src/app/common/services/custom-common.service';
 
 
 
@@ -14,12 +15,12 @@ export class DocTransactionComponent implements OnInit {
   displayedColumns = ['position','name', 'date', 'time', 'action', 'performed'];
   dataSource: any;
 
-  constructor(private commonService: CommonService) { }
+  constructor(private commonService: CommonService,private customCommonService: CustomCommonService) { }
   
 
   ngOnInit(): void {
-    if(this.commonService.userId){
-      this.listTable(this.commonService.userId);
+    if(this.customCommonService.userId){
+      this.listTable(this.customCommonService.userId);
     }
   }
 
@@ -27,7 +28,9 @@ export class DocTransactionComponent implements OnInit {
     this.commonService.histFileList(data).subscribe(res=>{
       console.log('data',res)
       this.dataSource = res;
-    })
+    }, error =>{
+      this.customCommonService.errorHandling(error);
+    });
   }
 
   

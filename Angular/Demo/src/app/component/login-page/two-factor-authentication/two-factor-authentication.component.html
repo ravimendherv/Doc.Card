@@ -16,7 +16,7 @@
                     
                     <mat-form-field>
                         <mat-label>Enter 4-Digit OTP</mat-label>
-                        <input #otpval formControlName="otp" matInput placeholder="4-Digit OTP" type="tel" minlength="4" maxlength="4" (keypress)="keyPress($event)" >
+                        <input #otpval formControlName="otp" appBlockCopyPaste matInput placeholder="4-Digit OTP" type="tel" minlength="4" maxlength="4" (keypress)="keyPress($event)" >
                         <mat-hint style="color: red;" *ngIf="g.otp.touched && g.otp.errors?.required">
                             OTP is Required
                         </mat-hint>

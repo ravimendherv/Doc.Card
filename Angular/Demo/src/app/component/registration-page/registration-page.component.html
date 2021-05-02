@@ -1,5 +1,5 @@
 <app-page-loader [isSmallLoader]="true" *ngIf="loaderval"></app-page-loader>
-
+<div class="pagestyle">
 <form #regForm= ngForm [formGroup]="regform" class="form_style">
 <mat-card class="float-left p-4">
     <mat-card-header>
@@ -15,7 +15,7 @@
         <div class="col-12 col-md-6  pb-3 float-left">
             <mat-form-field>
                 <mat-label>First Name</mat-label>
-                <input #Firstname formControlName="firstname" matInput placeholder="First Name">
+                <input #Firstname formControlName="firstname" (keypress)="firstLastNamekeyPress($event)" matInput placeholder="First Name">
                 <mat-hint style="color: red;" *ngIf="g.firstname.touched && g.firstname.errors?.required">
                     First Name is Required
                 </mat-hint>
@@ -26,7 +26,7 @@
         <div class="col-12 col-md-6 pb-3 float-left">
             <mat-form-field>
                 <mat-label>Last Name</mat-label>
-                <input #Lastname formControlName="lastname" matInput placeholder="Last Name">
+                <input #Lastname formControlName="lastname" (keypress)="firstLastNamekeyPress($event)" matInput placeholder="Last Name">
                 <mat-hint style="color: red;" *ngIf="g.lastname.touched && g.lastname.errors?.required">
                     Last Name is Required
                 </mat-hint>
@@ -65,7 +65,7 @@
             <div class="col-12 col-md-6 pl-0 float-left">
                 <mat-form-field>
                     <mat-label>Enter Email OTP</mat-label>
-                    <input formControlName="emailotp" (keyup)="eOTP($event)"  matInput placeholder="Enter Email OTP">
+                    <input formControlName="emailotp" appBlockCopyPaste (keyup)="eOTP($event)"  matInput placeholder="Enter Email OTP">
                     <mat-hint style="color: red;" *ngIf="g.emailotp.touched && g.emailotp.errors?.required">
                         OTP is Required
                     </mat-hint>
@@ -106,7 +106,7 @@
             <div class="col-12 col-md-6 pl-0 float-left">
                 <mat-form-field>
                     <mat-label>Enter Mobile OTP</mat-label>
-                    <input formControlName="mobileotp" (keyup)="mOTP($event)" matInput placeholder="Enter Mobile OTP">
+                    <input formControlName="mobileotp" (keyup)="mOTP($event)" appBlockCopyPaste matInput placeholder="Enter Mobile OTP">
                     <mat-hint style="color: red;" *ngIf="g.mobileotp.touched && g.mobileotp.errors?.required">
                         OTP is Required
                     </mat-hint>
@@ -126,7 +126,7 @@
         <div class="col-12 col-md-6 pb-3 float-left">
             <mat-form-field>
                 <mat-label>Password</mat-label>
-                <input #Passval formControlName="password"  [type]="hide1 ? 'password' : 'text' " matInput placeholder="Password" >
+                <input #Passval formControlName="password" appBlockCopyPaste [type]="hide1 ? 'password' : 'text' " matInput placeholder="Password" >
                 
                 <button mat-icon-button matSuffix (click)=" hide1 = !hide1" [attr.aria-label]="'Hide Password'" [attr.aria-pressed]="hide1">
                     <mat-icon>{{hide1 ? 'visibility_off' : 'visibility'}}</mat-icon>
@@ -143,7 +143,7 @@
         <div class="col-12 col-md-6 pb-3 float-left">
             <mat-form-field>
                 <mat-label>Confirm Password</mat-label>
-                <input #Confirmpassval formControlName="confirmpassword"  [type]="hide2 ? 'password' : 'text' " matInput placeholder="confirmpassword" >
+                <input #Confirmpassval formControlName="confirmpassword" appBlockCopyPaste [type]="hide2 ? 'password' : 'text' " matInput placeholder="confirmpassword" >
                 <button mat-icon-button matSuffix (click)=" hide2 = !hide2" [attr.aria-label]="'Hide Confirm Password'" [attr.aria-pressed]="hide2">
                     <mat-icon>{{hide2 ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
@@ -201,3 +201,4 @@
 
 </mat-card>
 </form>
+</div>

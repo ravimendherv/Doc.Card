@@ -39,8 +39,12 @@ export interface SmsVerificationAtRegistaration {
     "otp": string;
 }
 
-export interface FileDownload {
-    "path": string;
+export interface FileDelete {
+    "status": string;
+}
+
+export interface ContactUs {
+    "status": string;
 }
 
 export interface FileUpload {
@@ -101,4 +105,34 @@ export interface  FileToReceiver{
 
 export interface GetDocFromUser {
     "otp": string
+}
+
+export interface ForgotPass {
+    "id": string,
+    "status": string;
+    "otp": string;
+}
+
+export interface ResetPass {
+    "id": string;
+    "username": string;
+}
+
+export interface GetUserProfile {
+    "username": string,
+    "first_name": string,
+    "last_name": string,
+    "email": string,
+    "moblie_no": string,
+    "date_of_brith": string,
+    "user_type": string
+}
+
+export interface GetIdByUsername {
+    "id": string
+}
+
+export interface UpdateMobileEmail {
+    "id": string;
+    "doc_id": string;
 }

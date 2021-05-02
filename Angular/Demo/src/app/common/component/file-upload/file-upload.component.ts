@@ -7,6 +7,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { ViewChild } from '@angular/core';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
+import { CustomCommonService } from '../../services/custom-common.service';
+import { SUCCESS_HEADER, FILE_NAME_EXIST, SUCCESS_IMG, SUCCESS_COLOR, FILE_SIZE_255, FILE_TYPE_MSG } from '../../constant/constantFile';
 
 @Component({
   selector: 'app-file-upload',
@@ -17,7 +19,7 @@ export class FileUploadComponent implements OnInit {
 
   @Output() onFileEmit: EventEmitter<any> = new EventEmitter();
 
-  constructor(private http: HttpClient, private formbuilder: FormBuilder, private commonApicallService: CommonService) {
+  constructor(private http: HttpClient, private formbuilder: FormBuilder, private commonApicallService: CommonService, private customCommonService: CustomCommonService) {
     // this.Choosefile.nativeElement = ""; 
   }
 
@@ -27,6 +29,7 @@ export class FileUploadComponent implements OnInit {
   lines: any = [];
   linesR: any = [];
   filedata: any;
+  loaderval = false;
   progress: number = 0;
   form = this.formbuilder.group({
     fileName: ['', Validators.required],
@@ -39,73 +42,53 @@ export class FileUploadComponent implements OnInit {
     return this.form.controls;
   };
 
+  
+  keyPress(event: any) {
+    const pattern = /[A-Za-z0-9_]/;
+
+    let inputChar = String.fromCharCode(event.charCode);
+    if (event.keyCode != 8 && !pattern.test(inputChar)) {
+      event.preventDefault();
+    }
+  };
+
   onSubmit() {
     // this.onFileEmit.emit(this.form.value.docId);
+    this.loaderval = true;
     if(this.fileTypeVal == 'png'){
         const formData: FormData = new FormData();
-        formData.append('doc_id', this.commonApicallService.userId);
+        formData.append('doc_id', this.customCommonService.userId);
         formData.append('input_file', this.filedata);
         formData.append('file_name', this.form.value.fileName+'^');
 
         this.commonApicallService.pngfileUpload(formData).subscribe(x=>{
-          this.onFileEmit.emit(this.commonApicallService.userId);      
+          this.onFileEmit.emit(this.customCommonService.userId);  
+          this.loaderval = false;    
+        }, error =>{
+          this.customCommonService.OpenModal(SUCCESS_HEADER,FILE_NAME_EXIST,SUCCESS_IMG,SUCCESS_COLOR,'');
+          this.loaderval = false;
         });
 
     } else if(this.fileTypeVal == 'pdf'){
         const formData: FormData = new FormData();
-        formData.append('doc_id', this.commonApicallService.userId);
+        formData.append('doc_id', this.customCommonService.userId);
         formData.append('input_file', this.filedata);
         formData.append('file_name', this.form.value.fileName);
     
         this.commonApicallService.fileUpload(formData).subscribe(x=>{
-          this.onFileEmit.emit(this.commonApicallService.userId);      
+          this.onFileEmit.emit(this.customCommonService.userId);   
+          this.loaderval = false;   
+        }, error =>{
+          this.customCommonService.OpenModal(SUCCESS_HEADER,FILE_NAME_EXIST,SUCCESS_IMG,SUCCESS_COLOR,'');
+
+          this.loaderval = false;
         });
     }
     
-    // .pipe(
-    //   map((event: any) => {
-    //     if (event.type == HttpEventType.UploadProgress) {
-    //       this.progress = Math.round(event.loaded / event.total * 100);
-    //     } else if (event.type == HttpEventType.Response) {
-    //       this.progress = 0;
-    //       this.onFileEmit.emit(this.commonApicallService.userId);
-    //     }
-    //   }),
-    //   catchError((err: any) => {
-    //     this.progress = 0;
-    //     alert(err.message);
-    //     return throwError(err.message);
-    //   })
-    // )
-    //   .toPromise();
-
-
+  
   }
 
-  //  --------------File Type And Size Validation -------------------
-
-  // filetSize(sizeval:Number){
-  //   if(sizeval > 261120){
-  //     alert("File size should be max 255 kb.");
-  //     console.log("File Size:"+sizeval);
-
-  //   }
-  //   console.log(sizeval);
-  //   // maxbytes 255 kb = 261120 bytes
-
-  // }
-
-  // fileType(typeval:string){
-  //   let exttype = typeval.split('/');
-
-  //   if(exttype[1] == 'pdf' || exttype[1] == 'png'){
-  //     console.log("File Type: "+exttype[1]);
-  //   }
-  //   else{
-  //     alert("File Type should be .pdf or .png");
-  //   }
-
-  // }
+  
 
   onChange(event: any) {
 
@@ -120,13 +103,7 @@ export class FileUploadComponent implements OnInit {
       if (a > 261120) {
         // this.Ch.nativeElement.value = "";
         event.srcElement.value = null;
-
-
-        alert("File size should be max 255 kb.");
-
-
-        // file.value = null;
-        // file = '';
+        this.customCommonService.OpenModal(SUCCESS_HEADER,FILE_SIZE_255,SUCCESS_IMG,SUCCESS_COLOR,'');
       }
 
       let b = file.type;
@@ -138,14 +115,10 @@ export class FileUploadComponent implements OnInit {
       }
       else {
         event.srcElement.value = null;
-
-
-        alert("File Type should be .pdf or .png");
+        this.customCommonService.OpenModal(SUCCESS_HEADER,FILE_TYPE_MSG,SUCCESS_IMG,SUCCESS_COLOR,'');
 
       }
 
-      // this.fileType(file.type);
-      // this.onFileEmit.emit(this.form.value.docId);
     }
 
   }

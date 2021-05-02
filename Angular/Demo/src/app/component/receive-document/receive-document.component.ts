@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators} from '@angular/forms'
 import { Router } from '@angular/router';
+import { WARNING_HEADER, FILL_ALL_DETAILS, WARNING_IMG, WARNING_COLOR, ENTER_OTP } from 'src/app/common/constant/constantFile';
 import { CommonService } from 'src/app/common/services/common.service';
+import { CustomCommonService } from 'src/app/common/services/custom-common.service';
 
 @Component({
   selector: 'app-receive-document',
@@ -14,9 +16,11 @@ export class ReceiveDocumentComponent implements OnInit {
   optionsSelect: Array<any> = [];
   showval:string = '';
   fileNameList='';
+  showOtp:boolean = false;
+  senderOtp = '';
 
 
-  constructor(private formBuilder:FormBuilder, private router: Router, private commonService: CommonService) { }
+  constructor(private formBuilder:FormBuilder, private router: Router, private commonService: CommonService, private customCommonService: CustomCommonService) { }
 
   ngOnInit() {
     // this.optionsSelect = [
@@ -33,7 +37,8 @@ export class ReceiveDocumentComponent implements OnInit {
 
     senderid:['', Validators.required],
     contactFormSubjects: ['', Validators.required],
-    otptype:['', Validators.required]
+    otptype:['', Validators.required],
+    mobileotp: ['']
 
   });  
 
@@ -80,12 +85,16 @@ export class ReceiveDocumentComponent implements OnInit {
       console.log('Selected Files: ', this.showval);
       console.log('From filesend(): ',this.receivedfile.value);  
       this.commonService.getDocFromUser(this.receivedfile.value.senderid,this.fileNameList,this.receivedfile.value.otptype).subscribe(res=>{
-        // alert(res.status);
-        console.log(res)
+       
+        this.senderOtp = res.otp;
+        this.showOtp = true;
+      }, error =>{
+        this.customCommonService.errorHandling(error);
       });
 
     }else{
-      alert('Please Fill All the Details.');
+      this.customCommonService.OpenModal(WARNING_HEADER,FILL_ALL_DETAILS,WARNING_IMG,WARNING_COLOR,'');
+
     };
 
   };
@@ -114,8 +123,29 @@ export class ReceiveDocumentComponent implements OnInit {
     this.commonService.sendrFileList(data).subscribe(res=>{
       console.log('data',res)
       this.optionsSelect = res;
+    }, error =>{
+      this.customCommonService.errorHandling(error);
     })
   }
+
+  verifyOtp(){
+    if(this.senderOtp == this.receivedfile.value.mobileotp){
+      this.commonService.getsendFileToReceiver(this.receivedfile.value.senderid,this.fileNameList).subscribe(res=>{
+        
+        this.customCommonService.notifyCountBol = true;
+      }, error =>{
+        this.customCommonService.errorHandling(error);
+      });
+    } else {
+      this.customCommonService.OpenModal(WARNING_HEADER,ENTER_OTP,WARNING_IMG,WARNING_COLOR,'');
+    }
+  }
+
+  // getnotifycount() {
+  //   this.commonService.receiverNotify().subscribe(r => {
+  //     this.notify = r.count;
+  //   })
+  // }
 
 
 }

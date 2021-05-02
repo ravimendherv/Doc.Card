@@ -3,8 +3,15 @@ import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, retry } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { CardImg, EmailToUsername, EmailVerificationAtRegistaration, FileDownload, FileToReceiver, FileUpload, GetDocFromUser, HistFileList, Login, NotifyCount, NotifyList, outSideAuthToken, ReceicerRegistration, SenderKey, SenderRegistration, SmsVerificationAtRegistaration, UserCreate } from '../modal/Registration';
+import { CardImg, ContactUs, EmailToUsername, EmailVerificationAtRegistaration, FileDelete, FileToReceiver, FileUpload, ForgotPass, GetDocFromUser, GetUserProfile, HistFileList, Login, NotifyCount, NotifyList, outSideAuthToken, ReceicerRegistration, ResetPass, SenderKey, SenderRegistration, SmsVerificationAtRegistaration, UpdateMobileEmail, UserCreate } from '../modal/Registration';
 import { CustomCommonService } from './custom-common.service';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA
+} from "@angular/material/dialog";
+import { PopupModalComponent } from '../component/popup-modal/popup-modal.component';
+import { BACKEND_FAILE_0, ERROR_COLOR, ERROR_HEADER, ERROR_IMG } from '../constant/constantFile';
 
 @Injectable({
   providedIn: 'root'
@@ -12,16 +19,8 @@ import { CustomCommonService } from './custom-common.service';
 export class CommonService {
 
   baseUrl = environment.baseURL;
-  progress:number = 1;
-  url:string = '';
-  tokenval:any;
-  access:any;
-  refresh:any;
-  userId:any;
-  userType ='';
-  userEmail:any;
-  userName:any;
-  showUName:any;
+  
+  
 
 
 
@@ -49,19 +48,31 @@ export class CommonService {
  * @param result - optional value to return as the observable result
  */
    private handleError(error: HttpErrorResponse) {
+
+    
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', error.error.message);
+      // console.error('An error occurred:', error.error.message);
     } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong.
-      console.error(
-        `Backend returned code ${error.status}, ` +
-        `body was: ${error.error}`);
+      // console.error(
+      //   `Backend returned code ${error.status}, ` +
+      //   `body was: ${error.error}`);
     }
     // Return an observable with a user-facing error message.
     return throwError(
-      'Something bad happened; please try again later.');
+      error.status);
+  }
+
+  
+
+  contactUs(data: any): Observable<ContactUs> {    
+    
+    return this.http.post<ContactUs>(this.baseUrl+ '/contactUsView/', data, this.httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
 
@@ -72,7 +83,7 @@ export class CommonService {
     const outsidehttpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
-        "Authorization": "Token "+ this.tokenval
+        "Authorization": "Token "+ this.customCommonService.tokenval
       })
     };
     
@@ -106,11 +117,39 @@ export class CommonService {
     const outsidehttpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
-        "Authorization": "Token "+ this.tokenval
+        "Authorization": "Token "+ this.customCommonService.tokenval
       })
     };
 
     return this.http.post<EmailToUsername>(this.baseUrl+ '/email_to_username/', data, outsidehttpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  forgotPass(data: any): Observable<ForgotPass> {
+    const outsidehttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        "Authorization": "Token "+ this.customCommonService.tokenval
+      })
+    };
+    
+    return this.http.post<ForgotPass>(this.baseUrl+ '/api/forgotPasswordView/', data, outsidehttpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  resetPass(data: any, id: string): Observable<ResetPass> {
+    const outsidehttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        "Authorization": "Token "+ this.customCommonService.tokenval
+      })
+    };
+    
+    return this.http.patch<ResetPass>(this.baseUrl+ '/api/UserRegistrationViews/'+id+'/', data, outsidehttpOptions)
       .pipe(
         catchError(this.handleError)
       );
@@ -122,7 +161,7 @@ export class CommonService {
     const outsidehttpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
-        "Authorization": "Token "+ this.tokenval
+        "Authorization": "Token "+ this.customCommonService.tokenval
       })
     };
     return this.http.post<SenderRegistration>(this.baseUrl+ '/api/SenderRegistrationProcessViews/', data, outsidehttpOptions)
@@ -135,7 +174,7 @@ export class CommonService {
     const outsidehttpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
-        "Authorization": "Token "+ this.tokenval
+        "Authorization": "Token "+ this.customCommonService.tokenval
       })
     };
     
@@ -149,7 +188,7 @@ export class CommonService {
     const outsidehttpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
-        "Authorization": "Token "+ this.tokenval
+        "Authorization": "Token "+ this.customCommonService.tokenval
       })
     };
     return this.http.post<SenderKey>(this.baseUrl+ '/api/SenderKeyRegistrationProcessViews/', data, outsidehttpOptions)
@@ -168,7 +207,7 @@ export class CommonService {
       const outsidehttpOptions = {
         headers: new HttpHeaders({
           'Content-Type':  'application/json',
-          "Authorization": "Token "+ this.tokenval
+          "Authorization": "Token "+ this.customCommonService.tokenval
         })
       };
     return this.http.post<EmailVerificationAtRegistaration>(this.baseUrl+ '/emailVerificationAtRegistaration/', data, outsidehttpOptions)
@@ -184,7 +223,7 @@ export class CommonService {
       const outsidehttpOptions = {
         headers: new HttpHeaders({
           'Content-Type':  'application/json',
-          "Authorization": "Token "+ this.tokenval
+          "Authorization": "Token "+ this.customCommonService.tokenval
         })
       };
     return this.http.post<SmsVerificationAtRegistaration>(this.baseUrl+ '/smsVerificationAtRegistaration/', data, outsidehttpOptions)
@@ -206,12 +245,36 @@ export class CommonService {
       );
   }
 
-  fileDownload(emailval:string): Observable<FileDownload> {
+  getUserProfileData(): Observable<GetUserProfile> {
+    const insidesidehttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        "Authorization": "Bearer "+ this.customCommonService.access
+      })
+    };
+
+    return this.http.get<GetUserProfile>(this.baseUrl+ '/getUserProfile/', insidesidehttpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  
+
+  zipfileDelete(senderId:string, fileName:string): Observable<FileDelete> {
+    const insidesidehttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        "Authorization": "Bearer "+ this.customCommonService.access
+      })
+    };
+
     const data = {
-        "doc_id": this.userId,
-        "file_name": "abc"
+        "doc_id": senderId,
+        "file_name": fileName,
+        "receiver_doc_id": this.customCommonService.userId
       }
-    return this.http.post<FileDownload>(this.baseUrl+ '/file_upload/FileDownloaderView/', data, this.httpOptions)
+    return this.http.post<FileDelete>(this.baseUrl+ '/file_upload/ZipFileDeleterView/', data, insidesidehttpOptions)
       .pipe(
         catchError(this.handleError)
       );
@@ -221,10 +284,10 @@ export class CommonService {
     const insidesidehttpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
-        "Authorization": "Bearer "+ this.access
+        "Authorization": "Bearer "+ this.customCommonService.access
       })
     };
-    return this.http.get(this.baseUrl+ '/getData/?username='+ this.userId, insidesidehttpOptions)
+    return this.http.get(this.baseUrl+ '/getData/?username='+ this.customCommonService.userId, insidesidehttpOptions)
       .pipe(
         catchError(this.handleError)
       );
@@ -234,7 +297,7 @@ export class CommonService {
     const insidesidehttpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
-        "Authorization": "Bearer "+ this.access
+        "Authorization": "Bearer "+ this.customCommonService.access
       })
     };
     return this.http.get(this.baseUrl+ '/getData/?username='+ docId, insidesidehttpOptions)
@@ -247,11 +310,11 @@ export class CommonService {
     const insidesidehttpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
-        "Authorization": "Bearer "+ this.access
+        "Authorization": "Bearer "+ this.customCommonService.access
       })
     };
     const data = {
-      "doc_id":this.userId
+      "doc_id":this.customCommonService.userId
     } 
 
     return this.http.post<CardImg>(this.baseUrl+ '/getcard/', data, insidesidehttpOptions)
@@ -264,11 +327,11 @@ export class CommonService {
     const insidesidehttpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
-        "Authorization": "Bearer "+ this.access
+        "Authorization": "Bearer "+ this.customCommonService.access
       })
     };
     const data = {
-      "doc_id":this.userId
+      "doc_id":this.customCommonService.userId
     } 
 
     return this.http.post<NotifyCount>(this.baseUrl+ '/getNotificationCount/', data, insidesidehttpOptions)
@@ -281,12 +344,31 @@ export class CommonService {
     const insidesidehttpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
-        "Authorization": "Bearer "+ this.access
+        "Authorization": "Bearer "+ this.customCommonService.access
       })
     };
     const data = {
-      "doc_id": this.userId,
+      "doc_id": this.customCommonService.userId,
       "receiver_doc_id": receiverId,
+      "file_name": fileName
+    } 
+
+    return this.http.post<FileToReceiver>(this.baseUrl+ '/file_upload/FileDownloaderView/', data, insidesidehttpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  getsendFileToReceiver(seenderId:string, fileName:string): Observable<FileToReceiver> {
+    const insidesidehttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        "Authorization": "Bearer "+ this.customCommonService.access
+      })
+    };
+    const data = {
+      "doc_id": seenderId,
+      "receiver_doc_id": this.customCommonService.userId,
       "file_name": fileName
     } 
 
@@ -300,14 +382,42 @@ export class CommonService {
     const insidesidehttpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
-        "Authorization": "Bearer "+ this.access
+        "Authorization": "Bearer "+ this.customCommonService.access
       })
     };
     const data = {
-      "username":this.userId
+      "username":this.customCommonService.userId
     } 
 
     return this.http.post<NotifyList>(this.baseUrl+ '/api/getNotificationList/', data, insidesidehttpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  receiverPartillyUpdate(id:string,data:any): Observable<UpdateMobileEmail> {
+    const insidesidehttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        "Authorization": "Bearer "+ this.customCommonService.access
+      })
+    };     
+
+    return this.http.patch<UpdateMobileEmail>(this.baseUrl+ '/api/ReceicerRegistrationProcessViews/'+id+'/', data, insidesidehttpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  senderPartillyUpdate(id:string,data:any): Observable<UpdateMobileEmail> {
+    const insidesidehttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        "Authorization": "Bearer "+ this.customCommonService.access
+      })
+    };     
+
+    return this.http.patch<UpdateMobileEmail>(this.baseUrl+ '/api/SenderRegistration/'+id+'/', data, insidesidehttpOptions)
       .pipe(
         catchError(this.handleError)
       );
@@ -317,11 +427,11 @@ export class CommonService {
     const insidesidehttpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
-        "Authorization": "Bearer "+ this.access
+        "Authorization": "Bearer "+ this.customCommonService.access
       })
     };
     const data = {
-      "username":this.userId
+      "username":this.customCommonService.userId
     } 
 
     return this.http.post<HistFileList>(this.baseUrl+ '/api/getHistoryList/', data, insidesidehttpOptions)
@@ -334,7 +444,7 @@ export class CommonService {
     const insidesidehttpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
-        "Authorization": "Bearer "+ this.access
+        "Authorization": "Bearer "+ this.customCommonService.access
       })
     };
     const data = {
@@ -353,7 +463,7 @@ export class CommonService {
     const insidesidehttpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
-        "Authorization": "Bearer "+ this.access
+        "Authorization": "Bearer "+ this.customCommonService.access
       })
     };
     
@@ -369,7 +479,7 @@ export class CommonService {
     let params = new HttpParams();
 
     const options = {
-      headers: new HttpHeaders().set('Authorization', "Bearer "+this.access),
+      headers: new HttpHeaders().set('Authorization', "Bearer "+this.customCommonService.access),
       params: params,
       reportProgress: true,
       withCredentials: true,
@@ -393,7 +503,7 @@ export class CommonService {
     let params = new HttpParams();
 
     const options = {
-      headers: new HttpHeaders().set('Authorization', "Bearer "+this.access),
+      headers: new HttpHeaders().set('Authorization', "Bearer "+this.customCommonService.access),
       params: params,
       reportProgress: true,
       withCredentials: true,
@@ -432,7 +542,7 @@ export class CommonService {
   // }
 
   sendMessage(messageContent: any) {
-    return this.http.post(this.url,
+    return this.http.post(this.customCommonService.url,
     JSON.stringify(messageContent),
     { headers: new HttpHeaders({ 'Content-Type': 'application/json' }), responseType: 'text' });
   }

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators} from '@angular/forms'
 import { Router } from '@angular/router';
+import { WARNING_HEADER, FILL_ALL_DETAILS, WARNING_IMG, WARNING_COLOR, RECEVER_ID_INCORRECT } from 'src/app/common/constant/constantFile';
 import { CommonService } from 'src/app/common/services/common.service';
+import { CustomCommonService } from 'src/app/common/services/custom-common.service';
 
 
 @Component({
@@ -11,7 +13,7 @@ import { CommonService } from 'src/app/common/services/common.service';
 })
 export class SendDocumentComponent implements OnInit {
 
-  constructor(private formBuilder:FormBuilder, private router: Router, private commonService: CommonService) { }
+  constructor(private formBuilder:FormBuilder, private router: Router, private commonService: CommonService, private customCommonService: CustomCommonService) { }
 
   optionsSelect: Array<any> = [];
   showval:string = '';
@@ -32,13 +34,15 @@ export class SendDocumentComponent implements OnInit {
     //   { value: 'Other stuff', label: 'Other stuff' },
     //   ];
 
-      this.listTable(this.commonService.userId);
+      this.listTable(this.customCommonService.userId);
   }
 
   listTable(data:string){
     this.commonService.uploadeFileList(data).subscribe(res=>{
       console.log('data',res)
       this.optionsSelect = res;
+    }, error =>{
+      this.customCommonService.errorHandling(error);
     })
   }
 
@@ -76,11 +80,15 @@ export class SendDocumentComponent implements OnInit {
       console.log('Selected Files: ', this.showval);
       console.log('From filesend(): ',this.sendfile.value);  
       this.commonService.sendFileToReceiver(this.sendfile.value.receiverid,this.fileNameList).subscribe(res=>{
-        alert(res.status);
-      });
+        
+      }, error =>{
+        this.customCommonService.OpenModal(WARNING_HEADER,RECEVER_ID_INCORRECT,WARNING_IMG,WARNING_COLOR,'');
+        this.customCommonService.errorHandling(error);
+      }
+      );
 
     }else{
-      alert('Please Fill All the Details.');
+      this.customCommonService.OpenModal(WARNING_HEADER,FILL_ALL_DETAILS,WARNING_IMG,WARNING_COLOR,'');
     };
 
   };

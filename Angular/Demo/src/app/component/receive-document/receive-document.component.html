@@ -1,4 +1,4 @@
-<form [formGroup]="receivedfile" class="form_style">
+<form #receivedoc=ngForm [formGroup]="receivedfile" class="form_style">
     <mat-card class="p-5">
         
         <div class="row">
@@ -9,40 +9,41 @@
             </div>
         </div>
     
-        <div class="row">
+        <div class="row text-center">
             <div class="col-12 pb-3 float-left">
                 <mat-form-field>
                     <mat-label>Sender's Doc. Id</mat-label>
-                    <input formControlName="senderid"  matInput placeholder="Sender's Doc. Id" type="tel" minlength="12" maxlength="12" (keypress)="keyPress($event)" >
+                    <input #senderdocid formControlName="senderid"  matInput placeholder="Sender's Doc. Id" type="tel" minlength="12" maxlength="12" (keypress)="keyPress($event)" >
                     <mat-hint style="color: red;" *ngIf="g.senderid.touched && g.senderid.errors?.required">
                         Sender's Doc. Id is Required.
                     </mat-hint>
                 </mat-form-field>
 
-                <div>
-                    <button class="w-100" (click)="cardrequest()"  mat-raised-button color='primary'>Get Details</button>
+                <div class="col-12 pb-3 float-left">
+                    <button  (click)="cardrequest()"  mat-raised-button color='primary' >Get Details</button>
                     
                 </div>
 
             </div>
 
-            <div *ngIf = "carddetails == false">
-
-                <mat-form-field>
-                            
-                    <mat-select formControlName="contactFormSubjects" placeholder="Select File" [(value)]="showval" multiple>
-                    
-                        <mat-option *ngFor="let val of optionsSelect" [value]="val">
-                            {{val}}
-                        </mat-option>
-                    </mat-select>
-                    <mat-hint style="color: red;" *ngIf="g.contactFormSubjects.touched && g.contactFormSubjects.errors?.required">
-                        Please Select File.
-                    </mat-hint>
-                </mat-form-field>
+            <div class="row text-center" *ngIf = "carddetails == false">
+               
+                <div class="col-12 pb-3">
+                    <mat-form-field>       
+                        <mat-select formControlName="contactFormSubjects" placeholder="Select File" [(value)]="showval" multiple>
+                        
+                            <mat-option *ngFor="let val of optionsSelect" [value]="val">
+                                {{val}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-hint style="color: red;" *ngIf="g.contactFormSubjects.touched && g.contactFormSubjects.errors?.required">
+                            Please Select File.
+                        </mat-hint>
+                    </mat-form-field>
+                </div>
             
 
-                <div class="col-12 pb-3 float-left">
+                <div class="col-12 pb-3 ">
                     <mat-radio-group formControlName="otptype" class="margin-left">
                         <mat-label>OTP Type:</mat-label>&nbsp;
                         <mat-radio-button value="0">Email</mat-radio-button>&nbsp;
@@ -52,48 +53,30 @@
 
 
               
-                <div class="col-12 px-5 text-center float-left">
-                    <button class="w-100 button-style" color="info" outline="true" rounded="true"   (click)="filereceived()" mat-raised-button color='primary'>Request OTP</button>
+                <div class="col-12 pb-3 ">
+                    <button class=" button-style" color="info" outline="true" rounded="true"   (click)="filereceived()" mat-raised-button color='primary'>Request OTP</button>
                 </div>
-
-
-                <!-- <div class="col-12 pb-3 float-left">
-                        
-                    <div class="col-12 col-md-6 pl-0 float-left">
-                        <mat-form-field>
-                            <mat-label>Mobile Number</mat-label>
-                            <input formControlName="mobile"  [readOnly]="sendmobileotpDisable? true:false" matInput placeholder="Mobile Number" type="tel" maxlength="10" (keypress)="keyPress($event)" >
-                            <mat-hint style="color: red;" *ngIf="g.mobile.touched && g.mobile.errors?.required">
-                                Mobile Number is Required
-                            </mat-hint>
-                        </mat-form-field>
-                    </div>
             
-                    <div class="col-12 col-md-6 float-left sendotp-btn">
-                        <button (click)="sendmobileotp()" *ngIf="!g.mobile.errors?.required"  [disabled]="sendmobileotpDisable? true:false" mat-raised-button color='primary'>Send OTP</button>
-                    </div>
-                </div> -->
-            
-                <!-- <div class="col-12 pb-3 float-left" *ngIf = "otp2">
+                <div class="col-12 pb-3 " *ngIf = "showOtp">
                         
-                    <div class="col-12 col-md-6 pl-0 float-left">
+                    <div class="col-12 pb-3 ">
                         <mat-form-field>
-                            <mat-label>Enter Mobile OTP</mat-label>
-                            <input formControlName="mobileotp" (keyup)="mOTP($event)" matInput placeholder="Enter Mobile OTP">
+                            <mat-label>Enter OTP</mat-label>
+                            <input formControlName="mobileotp" appBlockCopyPaste3 matInput placeholder="Enter Mobile OTP">
                             <mat-hint style="color: red;" *ngIf="g.mobileotp.touched && g.mobileotp.errors?.required">
                                 OTP is Required
                             </mat-hint>
-                        <span *ngIf="mobileOTPVerify" class="material-icons text-success">check_circle</span>
+                        <!-- <span *ngIf="mobileOTPVerify" class="material-icons text-success">check_circle</span> -->
 
                         </mat-form-field>
                     </div>
 
-                    <div class="col-12 col-md-6 float-left sendotp-btn">
-                        <button (click)="verifymobile()" mat-raised-button color='primary'>Verify OTP</button>
-                        <button (click)="resetmobile()" class="ml-3" mat-raised-button color='primary'>Reset</button>
+                    <div class="col-12 pb-3  sendotp-btn">
+                        <button (click)="verifyOtp()" mat-raised-button color='primary'>Verify OTP</button>
+                        <!-- <button (click)="resetmobile()" class="ml-3" mat-raised-button color='primary'>Reset</button> -->
                     </div>
 
-                </div> -->
+                </div>
             </div>
         </div>
        
