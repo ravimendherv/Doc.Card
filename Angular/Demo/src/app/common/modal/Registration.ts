@@ -136,3 +136,12 @@ export interface UpdateMobileEmail {
     "id": string;
     "doc_id": string;
 }
+
+export interface GetOtpDelete {
+    "status": string;
+    "otp": string;
+}
+
+export interface DeleteUserAccount {
+    "status": string;
+}

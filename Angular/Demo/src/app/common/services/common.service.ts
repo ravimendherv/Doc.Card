@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, retry } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { CardImg, ContactUs, EmailToUsername, EmailVerificationAtRegistaration, FileDelete, FileToReceiver, FileUpload, ForgotPass, GetDocFromUser, GetUserProfile, HistFileList, Login, NotifyCount, NotifyList, outSideAuthToken, ReceicerRegistration, ResetPass, SenderKey, SenderRegistration, SmsVerificationAtRegistaration, UpdateMobileEmail, UserCreate } from '../modal/Registration';
+import { CardImg, ContactUs, DeleteUserAccount, EmailToUsername, EmailVerificationAtRegistaration, FileDelete, FileToReceiver, FileUpload, ForgotPass, GetDocFromUser, GetOtpDelete, GetUserProfile, HistFileList, Login, NotifyCount, NotifyList, outSideAuthToken, ReceicerRegistration, ResetPass, SenderKey, SenderRegistration, SmsVerificationAtRegistaration, UpdateMobileEmail, UserCreate } from '../modal/Registration';
 import { CustomCommonService } from './custom-common.service';
 import {
   MatDialog,
@@ -522,24 +522,35 @@ export class CommonService {
       // ));
   }
 
+  getOtpDelete(data:any): Observable<GetOtpDelete> {
+    const insidesidehttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        "Authorization": "Bearer "+ this.customCommonService.access
+      })
+    };    
 
-  // fileUpload(filedata:FormData): Observable<any> {
-    
-  //   return this.http.post(`${this.baseUrl}/file_upload/FileUploadView/`, filedata,{
-  //     reportProgress: true,
-  //     observe: 'events'
-  //   })
-  //     // .pipe(
-  //     //   // catchError(this.handleError)
-  //     //   map((event: any) => {
-  //     //     if (event.type == HttpEventType.UploadProgress) {
-  //     //       this.progress = Math.round((100 / event.total) * event.loaded);
-  //     //     } else if (event.type == HttpEventType.Response) {
-  //     //       this.progress = 0;
-  //     //     }
-  //     //   }
-  //     // ));
-  // }
+    return this.http.post<GetOtpDelete>(this.baseUrl+ '/sendOTPToEmailView/', data, insidesidehttpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  deleteUserAccount(data:any): Observable<DeleteUserAccount> {
+    const insidesidehttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        "Authorization": "Bearer "+ this.customCommonService.access
+      })
+    };    
+
+    return this.http.post<DeleteUserAccount>(this.baseUrl+ '/deleteUserView/', data, insidesidehttpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+
 
   sendMessage(messageContent: any) {
     return this.http.post(this.customCommonService.url,

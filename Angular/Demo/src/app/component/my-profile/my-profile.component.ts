@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BACKEND_FAILE_0, BACKEND_FAILE_401, EMAIL_EXISTS, EMAIL_STATUS, EMAIL_UPDATED, ENTER_OTP, ERROR_COLOR, ERROR_HEADER, ERROR_IMG, MOBILE_EXISTS, MOBILE_STATUS, MOBILE_UPDATED, SUCCESS_COLOR, SUCCESS_HEADER, SUCCESS_IMG, WARNING_COLOR, WARNING_HEADER, WARNING_IMG } from 'src/app/common/constant/constantFile';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { BACKEND_FAILE_0, BACKEND_FAILE_401, DELETE_ACCOUNT_MSG, EMAIL_EXISTS, EMAIL_STATUS, EMAIL_UPDATED, ENTER_OTP, ERROR_COLOR, ERROR_HEADER, ERROR_IMG, MOBILE_EXISTS, MOBILE_STATUS, MOBILE_UPDATED, SUCCESS_COLOR, SUCCESS_HEADER, SUCCESS_IMG, WARNING_COLOR, WARNING_HEADER, WARNING_IMG } from 'src/app/common/constant/constantFile';
 import { GetUserProfile } from 'src/app/common/modal/Registration';
 import { CommonService } from 'src/app/common/services/common.service';
 import { CustomCommonService } from 'src/app/common/services/custom-common.service';
+import { DeletePopupModalComponent } from './delete-popup-modal/delete-popup-modal.component';
 
 @Component({
   selector: 'app-my-profile',
@@ -36,9 +38,17 @@ export class MyProfileComponent implements OnInit {
   flag1:boolean = false;
   loaderval = false;
   disableVal = true;
+
+  headerText='Delete Account';
+  matDialogRef: MatDialogRef<DeletePopupModalComponent> | undefined;
+  name: string = "";
+  deleteOtp:any;
+
+
   // myProfile: FormGroup | undefined; 
   profileData: any;
   // profileData = {
+  //   id:'41',
   //   username: '4215335778884',
   //   first_name: 'Raj',
   //   last_name: 'Me',
@@ -48,7 +58,7 @@ export class MyProfileComponent implements OnInit {
   //   user_type: 'sender'
   // };
 
-  constructor(private formBuilder:FormBuilder, private commonService: CommonService,private customCommonService: CustomCommonService) { }
+  constructor(private formBuilder:FormBuilder, private commonService: CommonService,private customCommonService: CustomCommonService, private matDialog: MatDialog) { }
 
   myProfile = this.formBuilder.group({
     
@@ -63,6 +73,8 @@ export class MyProfileComponent implements OnInit {
     user_type: ['']
 
   });
+
+  
 
   ngOnInit(): void {
     this.getProfile();
@@ -353,5 +365,52 @@ export class MyProfileComponent implements OnInit {
     this.savephone = true;
     this.myProfile.controls['mobotp'].setValue('');
   }
+
+  // Delete Modal
+
+  clickDelete(){
+    
+    if(!this.emailInputFlag){
+      this.emailInputValue = this.profileData.email;
+    }
+    const data ={
+      name: this.customCommonService.userName,
+      email_id: this.emailInputValue,
+      subject: DELETE_ACCOUNT_MSG
+    }
+    this.commonService.getOtpDelete(data).subscribe(res=>{
+      if(res.otp){
+        this.deleteOtp = res.otp;
+        this.OpenModal(this.headerText,ERROR_IMG,ERROR_COLOR,res.otp,this.emailInputValue,this.profileData.username,this.customCommonService.userName);
+      }else {
+        this.customCommonService.OpenModal(WARNING_HEADER,res.status,WARNING_IMG,WARNING_COLOR,'');
+      }
+       
+    }, error =>{      
+      this.customCommonService.errorHandling(error);
+    });
+  }
+  
+  OpenModal(headerVal: string,alertypeVal: string,alertcolorVal: string,otpdataVal: string, emailVal: string, userIdVal: string, nameVal: string) {
+    this.matDialogRef = this.matDialog.open(DeletePopupModalComponent, {
+      data: { 
+        header: headerVal,
+        alertType: alertypeVal,
+        alertcolor: alertcolorVal,
+        otpdata: otpdataVal,
+        email: emailVal,
+        name: nameVal,
+        userId: userIdVal
+      },
+      disableClose: true
+    });
+
+    this.matDialogRef.afterClosed().subscribe(res => {
+      if ((res == true)) {
+        this.name = "";
+      }
+    });
+  }
+
 
 }

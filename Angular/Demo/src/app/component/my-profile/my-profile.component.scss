@@ -1,9 +1,15 @@
 .text-right {
-    text-align: right;
-  }
-.container-paddinng{
-    // padding: 0vw 15vw;
-    width: 90%;
-    background-color: #5de6de;
-background-image: linear-gradient(315deg, #5de6de 0%, #b58ecc 74%);
+  text-align: right;
+}
+.container-paddinng {
+  // padding: 0vw 15vw;
+  width: 90%;
+  background-color: #5de6de;
+  background-image: linear-gradient(315deg, #5de6de 0%, #b58ecc 74%);
+}
+
+.deleteButton {
+  color: white;
+  border: 1px black solid;
+  background-image: linear-gradient(315deg, #a71d31 0%, #3f0d12 74%);
 }

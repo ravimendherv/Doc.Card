@@ -18,6 +18,8 @@ export const ENTER_OTP = 'Please enter correct Otp';
 export const USER_CRETED = 'User registered successfully';
 export const RECEVER_ID_INCORRECT = 'Please check Receiver Id'
 export const SESSION_TIME_OUT = 'Session has expired please login again'
+export const DELETE_ACCOUNT_MSG = 'Verification for Account deleting process'
+
 
 
 

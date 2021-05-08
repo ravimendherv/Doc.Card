@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
 import { ViewChild } from '@angular/core';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { CustomCommonService } from '../../services/custom-common.service';
-import { SUCCESS_HEADER, FILE_NAME_EXIST, SUCCESS_IMG, SUCCESS_COLOR, FILE_SIZE_255, FILE_TYPE_MSG } from '../../constant/constantFile';
+import { SUCCESS_HEADER, FILE_NAME_EXIST, SUCCESS_IMG, SUCCESS_COLOR, FILE_SIZE_255, FILE_TYPE_MSG, WARNING_COLOR, WARNING_HEADER, WARNING_IMG } from '../../constant/constantFile';
 
 @Component({
   selector: 'app-file-upload',
@@ -65,7 +65,7 @@ export class FileUploadComponent implements OnInit {
           this.onFileEmit.emit(this.customCommonService.userId);  
           this.loaderval = false;    
         }, error =>{
-          this.customCommonService.OpenModal(SUCCESS_HEADER,FILE_NAME_EXIST,SUCCESS_IMG,SUCCESS_COLOR,'');
+        this.customCommonService.OpenModal(WARNING_HEADER,FILE_NAME_EXIST,WARNING_IMG,WARNING_COLOR,'');
           this.loaderval = false;
         });
 
