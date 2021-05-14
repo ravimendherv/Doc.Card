@@ -1,0 +1,16 @@
+<div style="width:300px">
+    <h2 mat-dialog-title>
+        <p [style.color]="alertcolor" ><mat-icon class="modalAlertIcon">{{alertType}}</mat-icon> {{header}}</p>
+    </h2>
+    <div mat-dialog-content>{{ msgBody }}</div>
+    <div mat-dialog-actions align="center">
+        <span>
+            <button type="button" mat-flat-button color="primary" (click)="CloseDialog()">
+                OK
+            </button>
+            <!-- <button type="button" mat-stroked-button color="primary" (click)="CloseDialog()">
+                Cancel
+            </button> -->
+        </span>
+    </div>
+</div>

@@ -23,6 +23,10 @@ import { MyProfileComponent } from './component/my-profile/my-profile.component'
 import { NotificationComponent } from './component/notification/notification.component';
 import { SendDocumentComponent } from './component/send-document/send-document.component';
 import { ReceiveDocumentComponent } from './component/receive-document/receive-document.component';
+import { TwoFactorAuthenticationComponent } from './component/login-page/two-factor-authentication/two-factor-authentication.component';
+import { HomePageComponent } from './component/home-page/home-page.component';
+import { PopupModalComponent } from './common/component/popup-modal/popup-modal.component';
+import { BlockCopyPasteDirective } from './common/directives/block-copy-paste.directive';
 
 
 @NgModule({
@@ -44,7 +48,11 @@ import { ReceiveDocumentComponent } from './component/receive-document/receive-d
     MyProfileComponent,
     NotificationComponent,
     SendDocumentComponent,
-    ReceiveDocumentComponent
+    ReceiveDocumentComponent,
+    TwoFactorAuthenticationComponent,
+    HomePageComponent,
+    PopupModalComponent,
+    BlockCopyPasteDirective
   ],
   imports: [
     BrowserModule,

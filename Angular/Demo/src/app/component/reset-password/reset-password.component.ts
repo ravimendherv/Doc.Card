@@ -1,7 +1,10 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { EMAIL_STATUS } from 'src/app/common/constant/constantFile';
+import { Router } from '@angular/router';
+import { BACKEND_FAILE_0, EMAIL_STATUS, ENTER_OTP, ERROR_COLOR, ERROR_HEADER, ERROR_IMG, PASSWORD_RESET_SUCCESSFULLY, SUCCESS_COLOR, SUCCESS_HEADER, SUCCESS_IMG, WARNING_COLOR, WARNING_HEADER, WARNING_IMG } from 'src/app/common/constant/constantFile';
 import { CommonService } from 'src/app/common/services/common.service';
+import { MatDialog } from "@angular/material/dialog";
+import { CustomCommonService } from 'src/app/common/services/custom-common.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -19,6 +22,8 @@ export class ResetPasswordComponent implements OnInit {
   sendemailotpDisable = false;
   emailOtp = '';
   emailInputOtp = '';
+  hidepass:boolean = true;
+  userId: string ='';
 
   // @HostListener('input') oninput() {
 
@@ -27,7 +32,8 @@ export class ResetPasswordComponent implements OnInit {
   //   }
   // }
 
-  constructor(private fb: FormBuilder, private commonservice: CommonService) {  }
+
+  constructor(private fb: FormBuilder, private commonservice: CommonService, private router: Router,private matDialog: MatDialog, private customCommonService: CustomCommonService ) {  }
 
     resetpasswordForm = this.fb.group({
     resetpasswordFormEmail: ['', Validators.compose([Validators.required, Validators.email])],
@@ -48,17 +54,44 @@ export class ResetPasswordComponent implements OnInit {
     return this.resetpasswordForm.controls;
   }
 
+
+  // OpenModal(headerVal: string,msgVal: string,alertypeVal: string,alertcolorVal: string) {
+  //   this.matDialogRef = this.matDialog.open(PopupModalComponent, {
+  //     data: { 
+  //       header: headerVal,
+  //       msgBody: msgVal,
+  //       alertType: alertypeVal,
+  //       alertcolor: alertcolorVal
+  //     },
+  //     disableClose: true
+  //   });
+
+  //   this.matDialogRef.afterClosed().subscribe(res => {
+  //     if ((res == true)) {
+  //       this.name = "";
+  //     }
+  //   });
+  // }
+
   onSubmit() {
+
     
-    this.commonservice.sendMessage(this.resetpasswordForm.value).subscribe(() => {
-      alert('Check Your Email, OTP is send for Varification.');
-      // this.contactForm.reset();
+    if(this.resetpasswordForm.valid){
+      const data ={
+        "password": this.resetpasswordForm.value.confirmpassword
+      }
+      this.commonservice.resetPass(data,this.userId).subscribe(res=>{
+          console.log(res);
+          
       // this.disabledSubmitButton = true;
-      
-      
-    }, (error: any) => {
-      console.log('Error', error);
-    });
+      this.emailOTPVerify =false;
+      this.customCommonService.OpenModal(SUCCESS_HEADER,PASSWORD_RESET_SUCCESSFULLY,SUCCESS_IMG,SUCCESS_COLOR,'');
+      this.router.navigateByUrl('/login');
+      this.resetpasswordForm.reset();
+      }, error=>{
+        this.customCommonService.errorHandling(error);   
+      })
+    }
   }
 
   MustMatch(controlName: string, matchingControlName: string) {
@@ -100,12 +133,13 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   verifyemail(){
+    this.hidepass = false;
     // this.resetemail();
     if(this.emailInputOtp === this.emailOtp){
       this.otp1 = ! this.otp1;
       this.emailOTPVerify =true;
     } else {
-      alert('Please enter correct OTP');
+      this.customCommonService.OpenModal(WARNING_HEADER,ENTER_OTP,WARNING_IMG,WARNING_COLOR,'');
     }
     
   }
@@ -113,23 +147,20 @@ export class ResetPasswordComponent implements OnInit {
   sendemailotp(){
     
     console.log(this.emailInputValue);
-    this.commonservice.emailVerificationAtRegistaration(this.emailInputValue).subscribe(res =>{
-        console.log('data=> ', res);
-        if(res.status === EMAIL_STATUS){
-          alert('This Email already Exie');
-        } else {
-          this.emailOtp = res.otp;
+
+    const data = {
+      "email": this.emailInputValue
+    }
+
+    this.commonservice.forgotPass(data).subscribe(res=>{
+      console.log(res);
+      this.userId = res.id;
+      this.emailOtp = res.otp;
           this.otp1 = ! this.otp1;
           this.sendemailotpDisable = true;
-        }
+    }, error=>{
+      this.customCommonService.errorHandling(error);  
     });
-
-    // this.commonService.fileDownload('data').subscribe(res=>{
-    //   // http://8066d19ccc37.ngrok.io
-    //   window.open(environment.baseURL+res.path);
-    // })
-
-    
   }
 
   

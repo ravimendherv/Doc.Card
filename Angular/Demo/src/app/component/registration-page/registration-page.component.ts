@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { EMAIL_STATUS } from 'src/app/common/constant/constantFile';
+import { EMAIL_EXISTS, EMAIL_STATUS, ENTER_OTP, FILL_ALL_DETAILS, MOBILE_EXISTS, SUCCESS_COLOR, SUCCESS_HEADER, SUCCESS_IMG, USER_CRETED, WARNING_COLOR, WARNING_HEADER, WARNING_IMG } from 'src/app/common/constant/constantFile';
 import { CommonService } from 'src/app/common/services/common.service';
+import { CustomCommonService } from 'src/app/common/services/custom-common.service';
 import { environment } from 'src/environments/environment';
 // import { PassThrough } from 'node:stream';
 
@@ -33,7 +34,10 @@ export class RegistrationPageComponent implements OnInit {
 
   ngOnInit(): void {  }
 
-  constructor(private formbuilder:FormBuilder, private commonService: CommonService) { }
+  constructor(private formbuilder:FormBuilder, private commonService: CommonService, private customCommonService: CustomCommonService) { }
+
+  d:string = "";
+  m:string = "";
 
   regform = this.formbuilder.group({
 
@@ -57,7 +61,6 @@ export class RegistrationPageComponent implements OnInit {
   
   );
 
-  
 
   saveform(){
     console.log('Form data is ', this.regform.value);
@@ -68,11 +71,33 @@ export class RegistrationPageComponent implements OnInit {
   };
 
   registersubmit(){
+
+
     this.loaderval = true;
      console.log(this.regform.value);
-    if (this.regform.valid) {  
-      // alert('Form Submitted succesfully!!!\n Check the values in browser console.');  
-      // console.table(this.regform.value);  
+    if (this.regform.valid) {
+      let g = this.regform.value.dob.getDate();
+      let h = this.regform.value.dob.getMonth();
+
+    
+      h = + h + 1;
+
+      if (g < 10){
+        this.d = "0" + g;
+      }
+      else {
+        this.d = ""+g;
+      }
+
+      if (h < 10){
+        this.m = "0" + h;
+      }
+      else {
+        this.m = ""+h;
+      }
+    
+
+
         const data = {
           "email": this.regform.value.email,
           "username": "",
@@ -90,28 +115,35 @@ export class RegistrationPageComponent implements OnInit {
               "l_name": this.regform.value.lastname,
               "email_id": this.regform.value.email,
               "mobile_no": this.regform.value.mobile,
-              "dob": this.regform.value.dob.getFullYear()+'-'+this.regform.value.dob.getMonth()+'-'+this.regform.value.dob.getDate(),
+              "dob": this.regform.value.dob.getFullYear()+'-'+this.m+'-'+this.d,
               "user_type": this.regform.value.usertype,
               "gender": this.regform.value.gender
             }
 
+            
+
             const sKey = {
+
               "id": res.id,
               "doc_id": res.username,
-              "date": this.regform.value.dob.getDate(),
-              "month": this.regform.value.dob.getMonth(),
+              "date": this.d,
+              "month": this.m,
               "year": this.regform.value.dob.getFullYear()
             }
 
             this.commonService.senderRegistration(sdata).subscribe(x=>{
 
+            }, error =>{
+              this.customCommonService.errorHandling(error);
             });
 
             this.commonService.senderKey(sKey).subscribe(s=>{
               this.loaderval = false;
-                alert('user Created')
+                this.customCommonService.OpenModal(SUCCESS_HEADER,USER_CRETED,SUCCESS_IMG,SUCCESS_COLOR,'');
                 this.resetlogin();
                 this.regform.reset(this.regform.value);
+            }, error =>{
+              this.customCommonService.errorHandling(error);
             });
 
           } else if(this.regform.value.usertype == '1'){
@@ -122,19 +154,23 @@ export class RegistrationPageComponent implements OnInit {
               "l_name": this.regform.value.lastname,
               "email_id": this.regform.value.email,
               "mobile_no": this.regform.value.mobile,
-              "dob": this.regform.value.dob.getFullYear()+'-'+this.regform.value.dob.getMonth()+'-'+this.regform.value.dob.getDate(),
+              "dob": this.regform.value.dob.getFullYear()+'-'+this.m+'-'+this.d,
               "user_type": this.regform.value.usertype,
               "gender": this.regform.value.gender
             }
 
             this.commonService.receicerRegistration(rdata).subscribe(y=>{
               this.loaderval = false;
-              alert('user Created')
+              this.customCommonService.OpenModal(SUCCESS_HEADER,USER_CRETED,SUCCESS_IMG,SUCCESS_COLOR,'');
               this.resetlogin();
               this.regform.reset(this.regform.value);
+            }, error =>{
+              this.customCommonService.errorHandling(error);
             });
     
           }
+      }, error =>{
+        this.customCommonService.errorHandling(error);
       });
 
       this.emailOTPVerify = false;
@@ -142,12 +178,21 @@ export class RegistrationPageComponent implements OnInit {
       
 
     }else{
-      alert('Please Fill All the Details.');
+      this.customCommonService.OpenModal(WARNING_HEADER,FILL_ALL_DETAILS,WARNING_IMG,WARNING_COLOR,'');
     }
   };
 
   keyPress(event: any) {
     const pattern = /[0-9\+\-\ ]/;
+
+    let inputChar = String.fromCharCode(event.charCode);
+    if (event.keyCode != 8 && !pattern.test(inputChar)) {
+      event.preventDefault();
+    }
+  };
+
+  firstLastNamekeyPress(event: any) {
+    const pattern = /[A-Za-z]/;
 
     let inputChar = String.fromCharCode(event.charCode);
     if (event.keyCode != 8 && !pattern.test(inputChar)) {
@@ -201,23 +246,33 @@ export class RegistrationPageComponent implements OnInit {
       this.otp1 = ! this.otp1;
       this.emailOTPVerify =true;
     } else {
-      alert('Please enter correct OTP');
+      this.customCommonService.OpenModal(WARNING_HEADER,ENTER_OTP,WARNING_IMG,WARNING_COLOR,'');
     }
     
   }
 
   sendemailotp(){
+
     
+    
+
+    console.log("d: ",typeof this.d, "m: ",typeof this.m);
+    console.log("Date: ",this.d, " Month: ",this.m);
+
+
     console.log(this.emailInputValue);
     this.commonService.emailVerificationAtRegistaration(this.emailInputValue).subscribe(res =>{
         console.log('data=> ', res);
+        
         if(res.status === EMAIL_STATUS){
-          alert('This Email already Exie');
+          this.customCommonService.OpenModal(WARNING_HEADER,EMAIL_EXISTS,WARNING_IMG,WARNING_COLOR,'');
         } else {
           this.emailOtp = res.otp;
           this.otp1 = ! this.otp1;
           this.sendemailotpDisable = true;
         }
+    }, error =>{
+      this.customCommonService.errorHandling(error);
     });
 
     // this.commonService.fileDownload('data').subscribe(res=>{
@@ -241,7 +296,7 @@ export class RegistrationPageComponent implements OnInit {
       this.otp2 = ! this.otp2;
       this.mobileOTPVerify =true;
     } else {
-      alert('Please enter correct OTP');
+      this.customCommonService.OpenModal(WARNING_HEADER,ENTER_OTP,WARNING_IMG,WARNING_COLOR,'');
     }
   };
 
@@ -252,12 +307,14 @@ export class RegistrationPageComponent implements OnInit {
     this.commonService.smsVerificationAtRegistaration(this.mobileInputValue.toString()).subscribe(res =>{
         // console.log('data=> ', res);
         if(res.status === EMAIL_STATUS){
-          alert('This Mobile no already Exie');
+          this.customCommonService.OpenModal(WARNING_HEADER,MOBILE_EXISTS,WARNING_IMG,WARNING_COLOR,'');
         } else {
           this.mobileOtp = res.otp;
           this.otp2 = ! this.otp2;
           this.sendmobileotpDisable = true;
         }
+    }, error =>{
+      this.customCommonService.errorHandling(error);
     });
   };
 

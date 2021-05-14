@@ -1,6 +1,9 @@
 import { Component, OnInit, HostListener  } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { SUCCESS_HEADER, SEND_SUCCESSFUL, SUCCESS_IMG, SUCCESS_COLOR } from '../../constant/constantFile';
 import { CommonService } from '../../services/common.service';
+import { CustomCommonService } from '../../services/custom-common.service';
 
 @Component({
   selector: 'app-contact-us',
@@ -20,14 +23,13 @@ optionsSelect: Array<any> = [];
   }
 }
 
-constructor(fb: FormBuilder, private commonservice: CommonService) {
+constructor(fb: FormBuilder, private commonservice: CommonService, private router: Router, private customCommonService: CustomCommonService) {
 
   this.contactForm = fb.group({
     'contactFormName': ['', Validators.required],
     'contactFormEmail': ['', Validators.compose([Validators.required, Validators.email])],
     'contactFormSubjects': ['', Validators.required],
-    'contactFormMessage': ['', Validators.required],
-    'contactFormCopy': [false],
+    'contactFormMessage': ['', Validators.required]
     });
   }
 
@@ -46,33 +48,27 @@ constructor(fb: FormBuilder, private commonservice: CommonService) {
     return this.contactForm.controls;
   };
 
-  // get name() {
-  //   return this.contactForm.get('contactFormName');
-  // }
-  // get email() {
-  //   return this.contactForm.get('contactFormEmail');
-  // }
-  // get subjects() {
-  //   return this.contactForm.get('contactFormSubjects');
-  // }
-  // get message() {
-  //   return this.contactForm.get('contactFormMessage');
-  // }
-  // get copy() {
-  //   return this.contactForm.get('contactFormCopy');
-  // }
 
   onSubmit() {
+
+    if(this.contactForm.valid){
+      const data = {
+        "name": this.contactForm.value.contactFormName,
+        "comment": this.contactForm.value.contactFormMessage,
+        "subject": this.contactForm.value.contactFormSubjects,
+        "email_id": this.contactForm.value.contactFormEmail
+      }
+
+      this.commonservice.contactUs(data).subscribe(res=>{
+          console.log(res)
+          this.customCommonService.OpenModal(SUCCESS_HEADER,SEND_SUCCESSFUL,SUCCESS_IMG,SUCCESS_COLOR,'/');
+      });
+
+    }
     
-    this.commonservice.sendMessage(this.contactForm.value).subscribe(() => {
-      alert('Your message has been sent.');
-      // this.contactForm.reset();
-      // this.disabledSubmitButton = true;
-      
-      
-    }, (error: any) => {
-      console.log('Error', error);
-    });
+    
+
+    
   }
 
   // constructor() { }

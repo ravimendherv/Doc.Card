@@ -4,11 +4,18 @@
   <div>
     <!-- <button mat-button routerLink='/doctransation'>Doc Tansaction History</button>
     <button mat-button routerLink='/doc' >Doc</button> -->
-    <button mat-button routerLink='/login' >Login</button>
-    <button mat-button  routerLink='/register'>Register</button>
-    <button mat-button  routerLink='/contactUs'>Contact Us</button>
-    <button mat-button  routerLink='/sender_dashboard'>Sender Dashboard</button>
-    <button mat-button  routerLink='/receiver_dashboard'>Receiver Dashboard</button>
+    <!-- <div *ngIf="!showValue"><button *ngIf="!showValue" mat-button routerLink='/login' >Login</button></div>
+    <div *ngIf="showValue"><button *ngIf="showValue" (click)="logOut()" mat-button routerLink='/home-page' >Logout</button></div> -->
+    <!-- <button mat-button  routerLink='/sender_dashboard'>MyProfile</button> -->
+    <button *ngIf="showValue==false" mat-button routerLink='/login' >Login</button>
+    <button *ngIf="showValue == true" (click)="logOut()" mat-button routerLink='/' >Logout</button>
+    <button *ngIf="showValue==false" mat-button  routerLink='/register'>Register</button>
+    <button *ngIf="showValue==false" mat-button  routerLink='/contactUs'>Contact Us</button>
+    <div *ngIf="showValue" class="float-right userName"><mat-icon class="userImg">account_circle</mat-icon> {{title}}</div>
+    <!-- <button mat-button  routerLink='/receiver_dashboard'>Receiver</button> -->
+    <!-- <button mat-button  routerLink='/sender_dashboard'>Sender Dashboard</button>
+    <button mat-button  routerLink='/receiver_dashboard'>Receiver Dashboard</button> -->
+    
     
   </div>
 </mat-toolbar>

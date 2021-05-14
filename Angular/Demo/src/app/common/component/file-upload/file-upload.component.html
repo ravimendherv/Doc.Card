@@ -1,54 +1,19 @@
-<!-- <div class="fileuploadWrapper {{overrideClass}}">
-    <label class="col-3 alignClass">Document: </label><input type="input" [(ngModel)]="fileName" readonly class="col-7 path-name">
-    <label class="browse-btn text-white"><input type="file" (change)="fileChange($event.target)" [accept]="filterFile" class="hiddn-input">Upload</label>
-    <label class="browse-btn" *ngIf="isUploadBtn" (click)="uploadFile()" [ngClass]="{'disabledElem':fileName===''}">
-        <img class="btnLoadeer" src="" *ngIf="file.inprogress">
-        {{file.inprogress?'':'Upload'}}
-    </label>
-</div> -->
+<app-page-loader [isSmallLoader]="true" *ngIf="loaderval"></app-page-loader>
 
 
 <div class="container">
 
-    <!-- <div class="row">
-      
-      <div class="col-12">
-        <div class="col-6">
-          <label class="col-4">Document: </label>
-         
-          <input class="col-8" type="file" name="profile" accept=".pdf" (change)="onChange($event)" />
-        </div>
-        <div class="col-6">
-          <button type="submit" (click)="onSubmit()">Upload Image File</button>
-        </div>
-
-      </div>
-
-    </div> -->
-
-
+ 
     <form #Fileform = ngForm [formGroup]="form" >
 
-      <!-- <input type="file" name="profile" (change)="onChange($event)" />
-      <button type="submit">Upload Image File</button> -->
 
       <div class="row">
-        
-        <!-- <div class="col-12  pb-3 float-left">
-            <mat-form-field>
-                <mat-label>Enter DocCard_ID</mat-label>
-                <input #Docid formControlName="docId" matInput placeholder="Enter DocCard_ID">
-                <mat-hint style="color: red;" *ngIf="g.docId.touched && g.docId.errors?.required">
-                  DocCard_ID is Required
-                </mat-hint>
-                
-            </mat-form-field>
-        </div> -->
+   
 
         <div class="col-12  pb-3 float-left">
             <mat-form-field>
                 <mat-label>Enter File Name</mat-label>
-                <input #Filename formControlName="fileName"   matInput placeholder="Enter File Name">
+                <input #Filename formControlName="fileName" (keypress)="keyPress($event)" appBlockCopyPaste  matInput placeholder="Enter File Name">
                 <mat-hint style="color: red;" *ngIf="g.fileName.touched && g.fileName.errors?.required">
                     File Name is Required
                 </mat-hint>
@@ -76,13 +41,6 @@
   
     </form>
 
-        
-       
-    
-
-      
-    <!-- <input type="file" name="profile" (change)="onChange($event)" />
-    <br>
-    <button class="w-100" (click)="upload()" mat-raised-button color='primary'>Submit</button> -->
+   
   
   </div>

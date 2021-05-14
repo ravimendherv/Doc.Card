@@ -1,14 +1,14 @@
 
 <mat-sidenav-container autosize>
   
-  <mat-toolbar >
+  <!-- <mat-toolbar >
     <mat-toolbar-row >
       <span class="example-spacer"></span>
       <button mat-button class="example-icon" aria-hidden="false" aria-label="Example exit_to_app icon">
         <mat-icon>exit_to_app</mat-icon>
       </button>
     </mat-toolbar-row>
-  </mat-toolbar>
+  </mat-toolbar> -->
   
   <mat-sidenav #sidenav mode="side" opened="true">
       
@@ -21,27 +21,27 @@
         </mat-list-item>
         
   
-        <mat-list-item routerLink="myprofile">
+        <mat-list-item routerLink="myprofile" routerLinkActive="active-link">
           <mat-icon mat-list-icon >perm_identity</mat-icon>
           <span *ngIf="isExpanded">My Profile</span>
         </mat-list-item>
   
-        <mat-list-item routerLink="doctransation">
+        <mat-list-item routerLink="doctransation" routerLinkActive="active-link">
           <mat-icon mat-list-icon>event_note</mat-icon>
           <span *ngIf="isExpanded">Document History</span>
         </mat-list-item>
   
-        <mat-list-item routerLink="doc">
+        <mat-list-item routerLink="doc" routerLinkActive="active-link">
           <mat-icon >file_copy</mat-icon>
           <span *ngIf="isExpanded">Document Operation</span>
         </mat-list-item>
 
-        <mat-list-item routerLink="sendfile">
+        <mat-list-item routerLink="sendfile" routerLinkActive="active-link">
           <mat-icon >send</mat-icon>
           <span *ngIf="isExpanded">Send Files</span>
         </mat-list-item>
 
-        <mat-list-item routerLink="doccard">
+        <mat-list-item routerLink="doccard" routerLinkActive="active-link">
           <mat-icon >card_membership</mat-icon>
           <span *ngIf="isExpanded">Doc. Card</span>
         </mat-list-item>
@@ -49,7 +49,7 @@
     </mat-nav-list>
   </mat-sidenav>
   
-  <div class="content">
+  <div class="content pt-4">
       <!-- <app-sender-dashboard></app-sender-dashboard> -->
     <router-outlet></router-outlet>
   </div>
