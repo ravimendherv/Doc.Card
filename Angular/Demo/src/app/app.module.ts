@@ -27,6 +27,7 @@ import { TwoFactorAuthenticationComponent } from './component/login-page/two-fac
 import { HomePageComponent } from './component/home-page/home-page.component';
 import { PopupModalComponent } from './common/component/popup-modal/popup-modal.component';
 import { BlockCopyPasteDirective } from './common/directives/block-copy-paste.directive';
+import { BnNgIdleService } from 'bn-ng-idle';
 
 
 @NgModule({
@@ -63,7 +64,7 @@ import { BlockCopyPasteDirective } from './common/directives/block-copy-paste.di
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [BnNgIdleService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

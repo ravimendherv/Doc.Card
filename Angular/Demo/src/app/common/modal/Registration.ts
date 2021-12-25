@@ -31,12 +31,12 @@ export interface ReceicerRegistration{
 
 export interface EmailVerificationAtRegistaration {
     "status": string;
-    "otp": string;
+    "resquest_timestamp": string;
 }
 
 export interface SmsVerificationAtRegistaration {
     "status": string;
-    "otp": string;
+    "resquest_timestamp": string;
 }
 
 export interface FileDelete {
@@ -65,7 +65,7 @@ export interface Login {
     "access": string,
     "username": string,
     "usertype": string,
-    "otp": string,
+    "resquest_timestamp": string,
     "email": string,
     "detail": string,
     "name": string
@@ -104,13 +104,13 @@ export interface  FileToReceiver{
 }
 
 export interface GetDocFromUser {
-    "otp": string
+    "resquest_timestamp": string
 }
 
 export interface ForgotPass {
     "id": string,
     "status": string;
-    "otp": string;
+    "resquest_timestamp": string;
 }
 
 export interface ResetPass {
@@ -138,10 +138,18 @@ export interface UpdateMobileEmail {
 }
 
 export interface GetOtpDelete {
+    "resquest_timestamp": string;
     "status": string;
-    "otp": string;
 }
 
 export interface DeleteUserAccount {
+    "status": string;
+}
+
+export interface CheckOTPView {
+    "status": string;
+}
+
+export interface CheckOTPViewAfterLogin {
     "status": string;
 }

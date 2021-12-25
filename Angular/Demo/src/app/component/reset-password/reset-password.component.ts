@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BACKEND_FAILE_0, EMAIL_STATUS, ENTER_OTP, ERROR_COLOR, ERROR_HEADER, ERROR_IMG, PASSWORD_RESET_SUCCESSFULLY, SUCCESS_COLOR, SUCCESS_HEADER, SUCCESS_IMG, WARNING_COLOR, WARNING_HEADER, WARNING_IMG } from 'src/app/common/constant/constantFile';
+import { BACKEND_FAILE_0, EMAIL_STATUS, ENTER_CORRECT_EMAIL, ENTER_OTP, ENTER_OTP_TIME, ERROR_COLOR, ERROR_HEADER, ERROR_IMG, PASSWORD_RESET_SUCCESSFULLY, SUCCESS_COLOR, SUCCESS_HEADER, SUCCESS_IMG, WARNING_COLOR, WARNING_HEADER, WARNING_IMG } from 'src/app/common/constant/constantFile';
 import { CommonService } from 'src/app/common/services/common.service';
 import { MatDialog } from "@angular/material/dialog";
 import { CustomCommonService } from 'src/app/common/services/custom-common.service';
@@ -133,11 +133,51 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   verifyemail(){
-    this.hidepass = false;
+    
     // this.resetemail();
-    if(this.emailInputOtp === this.emailOtp){
-      this.otp1 = ! this.otp1;
-      this.emailOTPVerify =true;
+    if(this.emailOtp !== undefined){
+      const rTime = this.customCommonService.timeSpamCalculation();
+      const data = {
+        id: this.resetpasswordForm.value.emailotp,
+        f_name: this.emailOtp,
+        l_name: rTime,
+      };
+
+      this.commonservice.checkOTPView(data).subscribe(
+        (res) => {
+          // this.loaderval = false;
+          if (res.status === 'True') {
+            this.otp1 = ! this.otp1;
+            this.emailOTPVerify =true;
+            this.hidepass = false;
+          }
+        },
+        (error) => {
+          // this.loaderval = false;
+          if (error === 400) {
+            this.customCommonService.OpenModal(
+              WARNING_HEADER,
+              ENTER_OTP,
+              WARNING_IMG,
+              WARNING_COLOR,
+              ''
+            );
+          } else if (error === 401) {
+            this.customCommonService.OpenModal(
+              WARNING_HEADER,
+              ENTER_OTP_TIME,
+              WARNING_IMG,
+              WARNING_COLOR,
+              ''
+            );
+          } else {
+            this.customCommonService.errorHandling(error);
+          }
+
+          // this.customCommonService.errorHandling(error);
+        }
+      );
+      
     } else {
       this.customCommonService.OpenModal(WARNING_HEADER,ENTER_OTP,WARNING_IMG,WARNING_COLOR,'');
     }
@@ -154,10 +194,21 @@ export class ResetPasswordComponent implements OnInit {
 
     this.commonservice.forgotPass(data).subscribe(res=>{
       console.log(res);
-      this.userId = res.id;
-      this.emailOtp = res.otp;
+      if(res.status !== 'False'){
+        this.userId = res.id;
+        this.emailOtp = res.resquest_timestamp;
           this.otp1 = ! this.otp1;
           this.sendemailotpDisable = true;
+      } else {
+        this.customCommonService.OpenModal(
+          WARNING_HEADER,
+          ENTER_CORRECT_EMAIL,
+          WARNING_IMG,
+          WARNING_COLOR,
+          ''
+        );
+      }
+      
     }, error=>{
       this.customCommonService.errorHandling(error);  
     });

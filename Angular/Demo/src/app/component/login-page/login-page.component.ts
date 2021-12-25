@@ -130,7 +130,7 @@ export class LoginPageComponent implements OnInit {
           this.customCommonService.access = res.access;
           this.customCommonService.refresh = res.refresh;
           this.customCommonService.userId = res.username;
-          this.authOtp =res.otp;
+          this.authOtp =res.resquest_timestamp;
           this.apiUserType = res.usertype;
           this.customCommonService.userEmail = res.email;
           this.customCommonService.userName = res.name;

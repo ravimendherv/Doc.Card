@@ -2,11 +2,11 @@
 
     <form #twofactor=ngForm style="color: #757575;" [formGroup]="twoauth">
         <mat-card class="p-0">
-            <mat-card-header class="info-color headerBg white-text text-center py-4">
+            <div class="row info-color headerBg white-text text-center py-4">
                 <div class="twoverify text-white">Doc.Card Device Verification</div>
-            </mat-card-header>
+            </div>
 
-            <div class="row p-5">
+            <div class="row padd-5">
 
                 <div class="col-12 w-100 pb-4 text-center">
                     <img src="\assets\images\doc.png" class="img-rounded" alt="DocCard Logo" width="150" height="100">
@@ -24,14 +24,14 @@
                     
                 </div>
 
-                <div class="col-12 px-5 text-center float-left">
+                <div class="col-12 text-center float-left">
                     <button class="w-100 button-style" color="info" outline="true" rounded="true" (click)="onSubmit()" mat-raised-button color='primary' [disabled]="otpval.value == '' || !twofactor.valid" (click)="twofactor.reset({})">Send</button>
                 </div>
 
-                <div class="col-12 px-5 text-center float-left">
+                <div class="col-12 text-center float-left">
                   
                         <span> We just sent your authentication code via email to {{uEmail}}</span><br>
-                        <span> The code will expire at 12:36PM IST.</span><br>
+                        <span> The code will expire at {{dateValue | date: 'h:mm a'}} IST.</span><br>
                         <span> Re-send the code</span><br>
                         <span>
                             If you'd like to automatically verify devices in the future, consider enabling two-factor authentication on your account. 

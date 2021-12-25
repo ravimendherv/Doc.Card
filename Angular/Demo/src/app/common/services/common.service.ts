@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, retry } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { CardImg, ContactUs, DeleteUserAccount, EmailToUsername, EmailVerificationAtRegistaration, FileDelete, FileToReceiver, FileUpload, ForgotPass, GetDocFromUser, GetOtpDelete, GetUserProfile, HistFileList, Login, NotifyCount, NotifyList, outSideAuthToken, ReceicerRegistration, ResetPass, SenderKey, SenderRegistration, SmsVerificationAtRegistaration, UpdateMobileEmail, UserCreate } from '../modal/Registration';
+import { CardImg, CheckOTPView, CheckOTPViewAfterLogin, ContactUs, DeleteUserAccount, EmailToUsername, EmailVerificationAtRegistaration, FileDelete, FileToReceiver, FileUpload, ForgotPass, GetDocFromUser, GetOtpDelete, GetUserProfile, HistFileList, Login, NotifyCount, NotifyList, outSideAuthToken, ReceicerRegistration, ResetPass, SenderKey, SenderRegistration, SmsVerificationAtRegistaration, UpdateMobileEmail, UserCreate } from '../modal/Registration';
 import { CustomCommonService } from './custom-common.service';
 import {
   MatDialog,
@@ -203,14 +203,29 @@ export class CommonService {
     const data = {
         "email": emailval
       }
-
+      console.log('===>',this.customCommonService.tokenval);
       const outsidehttpOptions = {
         headers: new HttpHeaders({
           'Content-Type':  'application/json',
           "Authorization": "Token "+ this.customCommonService.tokenval
         })
       };
+      
     return this.http.post<EmailVerificationAtRegistaration>(this.baseUrl+ '/emailVerificationAtRegistaration/', data, outsidehttpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  checkOTPView(data: any): Observable<CheckOTPView> {
+    
+      const outsidehttpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+          "Authorization": "Token "+ this.customCommonService.tokenval
+        })
+      };
+    return this.http.post<CheckOTPView>(this.baseUrl+ '/checkOTPView/', data, outsidehttpOptions)
       .pipe(
         catchError(this.handleError)
       );
@@ -259,7 +274,19 @@ export class CommonService {
       );
   }
 
-  
+  checkOTPViewAfterLogin(data: any): Observable<CheckOTPViewAfterLogin> {
+    
+    const outsidehttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        "Authorization": "Bearer "+ this.customCommonService.access
+      })
+    };
+  return this.http.post<CheckOTPViewAfterLogin>(this.baseUrl+ '/checkOTPViewAfterLogin/', data, outsidehttpOptions)
+    .pipe(
+      catchError(this.handleError)
+    );
+}
 
   zipfileDelete(senderId:string, fileName:string): Observable<FileDelete> {
     const insidesidehttpOptions = {
@@ -275,6 +302,25 @@ export class CommonService {
         "receiver_doc_id": this.customCommonService.userId
       }
     return this.http.post<FileDelete>(this.baseUrl+ '/file_upload/ZipFileDeleterView/', data, insidesidehttpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  linkDelete(senderId:string, fileName:string): Observable<FileDelete> {
+    const insidesidehttpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        "Authorization": "Bearer "+ this.customCommonService.access
+      })
+    };
+
+    const data = {
+        "doc_id": senderId,
+        "file_name": fileName,
+        "receiver_doc_id": this.customCommonService.userId
+      }
+    return this.http.post<FileDelete>(this.baseUrl+ '/file_upload/NotificationDeleterView/', data, insidesidehttpOptions)
       .pipe(
         catchError(this.handleError)
       );

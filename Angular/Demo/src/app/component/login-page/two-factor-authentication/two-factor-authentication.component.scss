@@ -1,6 +1,6 @@
 .mat-form-field{
-    width: 70%;
-    padding-left: 8rem;
+    width: 100%;
+    padding-left: 25px;
     // padding-right: -1rem;
 
 }
@@ -10,7 +10,7 @@
     text-align: center;
     font-size: 2vw;
     font-weight: 500;
-    width: 100%;
+    width: 155%;
 }
 
 .headerBg{
@@ -30,4 +30,12 @@
     background-color: #0499f2;
     background-image: linear-gradient(315deg, #0499f2 0%, #26f596 74%);
 
+}
+
+.padd-5 {
+    padding: 3vw;
+}
+
+.mat-card-header-text {
+    margin: 0px;
 }

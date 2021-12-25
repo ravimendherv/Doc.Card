@@ -1,7 +1,7 @@
 <app-page-loader [isSmallLoader]="true" *ngIf="loaderval"></app-page-loader>
 
 
-<div class="container container-paddinng text-dark">
+<div *ngIf="!loaderval" class="container container-paddinng text-dark">
     <form [formGroup]="myProfile">
 
         <div class="row">

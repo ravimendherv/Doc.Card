@@ -6,22 +6,22 @@
     <div mat-dialog-content>
         <form #deleteform = ngForm [formGroup]="deletePopup">
             <div class="row">
-                <div class="col-12 col-md-12  pb-3 float-left">
-                    <mat-form-field class="col-7 col-md-7  pb-3 float-left">
+                <div class="col-12 col-md-12  pb-3 float-left"  >
+                    <mat-form-field class="col-7 col-md-7  pb-3 float-left"  >
                         <mat-label>Enter OTP</mat-label>
-                        <input #mobileotp formControlName="deleteOtp" matInput maxlength="4" minlength="4" (keypress)="keyPress($event)">
+                        <input #mobileotp formControlName="deleteOtp" matInput maxlength="4" minlength="4" (keypress)="keyPress($event)" [readonly] ="!commentarea">
                         <mat-hint style="color: red;" *ngIf="g.deleteOtp.touched && g.deleteOtp.errors?.required">
                             OTP is required
                         </mat-hint>
                     </mat-form-field>
-                    <div class="col-5 col-md-5  pb-3 float-left">
-                        <button  type="button" mat-flat-button color="primary"   (click)="otpVerify()" *ngIf="mobileotp.value">Verify</button>
-                        <button type="button" mat-stroked-button color="primary" class="ml-1" *ngIf="mobileotp.value" (click)="otpReset()">Resend</button>
+                    <div class="col-5 col-md-5  pb-3 float-left" >
+                        <button  type="button" mat-flat-button color="primary"   (click)="otpVerify()" *ngIf="mobileotp.value" [disabled]="!commentarea" >Verify </button>
+                        <button type="button" mat-stroked-button color="primary" class="ml-1" *ngIf="mobileotp.value" (click)="otpReset()" [disabled]="!commentarea" >Resend</button>
                     </div>
                     
                 </div>
 
-                <div class="col-12 pb-3 float-left col-md-12" *ngIf="!commentarea">
+                <div class="col-12 pb-3 float-left col-md-12" *ngIf="!commentarea" >
                     <mat-form-field class="col-12 pb-3 float-left col-md-12">
                         <textarea matInput placeholder="Comments" formControlName="comments"></textarea>
                         <mat-hint style="color: red;" *ngIf="g.comments.touched && g.comments.errors?.required">

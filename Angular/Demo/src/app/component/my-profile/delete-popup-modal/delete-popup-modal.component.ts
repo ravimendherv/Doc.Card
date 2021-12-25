@@ -23,6 +23,7 @@ export class DeletePopupModalComponent implements OnInit {
   nameVal = '';
   userIdVal= '';
   
+  
 
   //disable-enable buttons
 
@@ -30,6 +31,7 @@ export class DeletePopupModalComponent implements OnInit {
   resendotp:boolean = true;
   okbtn:boolean = true;
   commentarea:boolean = true;
+  otp:boolean = false;
 
   constructor(
     private _mdr: MatDialogRef<DeletePopupModalComponent>,
@@ -81,13 +83,31 @@ export class DeletePopupModalComponent implements OnInit {
   }
 
   otpVerify() {
+
+    const rTime = this.customCommonService.timeSpamCalculation();
+      const data = {
+        id: this.deletePopup.value.deleteOtp,
+        f_name: this.otpdata,
+        l_name: rTime,
+      };
+
+      this.commonService.checkOTPViewAfterLogin(data).subscribe(
+        (res) => {
+          if (res.status === 'True') {
+            this.commentarea = false;
+          }
+        }, error =>{ 
+          this.customCommonService.OpenModal(WARNING_HEADER,ENTER_OTP,WARNING_IMG,WARNING_COLOR,'');
+         }
+      );
     
-    if(this.otpdata == this.deletePopup.value.deleteOtp){
-      // this.resendotp = false;
-      this.commentarea = false;
-    } else {
-      this.customCommonService.OpenModal(WARNING_HEADER,ENTER_OTP,WARNING_IMG,WARNING_COLOR,'');
-    }
+    // if(this.otpdata == this.deletePopup.value.deleteOtp){
+    //   // this.resendotp = false;
+    //   this.commentarea = false;
+    // } else {
+    //   this.customCommonService.OpenModal(WARNING_HEADER,ENTER_OTP,WARNING_IMG,WARNING_COLOR,'');
+    // }
+    // this.otp = true;
   }
 
   otpReset() {
@@ -99,8 +119,8 @@ export class DeletePopupModalComponent implements OnInit {
       subject: DELETE_ACCOUNT_MSG
     }
     this.commonService.getOtpDelete(data).subscribe(res=>{
-      if(res.otp){
-        this.otpdata = res.otp;
+      if(res.resquest_timestamp){
+        this.otpdata = res.resquest_timestamp;
       }else {
         this.customCommonService.OpenModal(WARNING_HEADER,res.status,WARNING_IMG,WARNING_COLOR,'');
       }
